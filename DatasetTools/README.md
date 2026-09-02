@@ -1,5 +1,10 @@
 # DatasetTools — SceneSolver scene organization
 
+[![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Dataset Tools](https://img.shields.io/badge/Dataset-Tools-000000?style=for-the-badge)](.)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](../LICENSE)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-FFB000?style=for-the-badge&logo=huggingface&logoColor=black)](https://huggingface.co/spaces/samxkevin/SceneSolver)
+
 Safe, deterministic reordering / shuffling for SceneSolver scene folders.
 Sits in front of **Phase 2 (Frame Extraction)** and **Phase 3 (CLIP keyframe
 selection)** of the pipeline in [`../Insights.md`](../Insights.md), so
