@@ -5,8 +5,15 @@ Sits in front of **Phase 2 (Frame Extraction)** and **Phase 3 (CLIP keyframe
 selection)** of the pipeline in [`../Insights.md`](../Insights.md), so
 TimeSformer never receives a temporally scrambled sequence.
 
-Live demo of the analysis pipeline this feeds:
-<https://huggingface.co/spaces/samxkevin/SceneSolver>
+## Live demo
+
+The SceneSolver analysis pipeline that DatasetTools feeds is published as a
+Hugging Face Space — this is the live/demo interface for the project:
+
+**<https://huggingface.co/spaces/samxkevin/SceneSolver>**
+
+DatasetTools prepares and validates the scene/frame data that the Space's
+pipeline (AutoEncoder → TimeSformer → YOLO → fusion → LLaVA) consumes.
 
 ```
 DatasetTools/
@@ -210,3 +217,10 @@ duplicate name & content detection, missing-sequence detection (with sampled
 step awareness), ambiguous filenames, inconsistent scene assignment, scene
 boundary preservation, input immutability, mapping completeness,
 reversibility, `--rename` invertibility, end-to-end reproducibility, and CLI.
+
+---
+
+## License
+
+Released under the MIT License. See [`../LICENSE`](../LICENSE) at the
+repository root.
