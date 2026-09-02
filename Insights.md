@@ -416,3 +416,23 @@ Phase 0: (Time: 10:03 PM, 13th May)
 Text in Droppbox Link of the Dataset: `Abuse028_x264.mp4  Abuse  165  240  -1  -1 `
 Text generated in Output: `Abuse028_x264.mp4  Abuse  0  171  79  319`
 Most sit and Work on Refining this.
+
+### Dataset / Scene Organization Tooling (September 2, 2026)
+
+Added `DatasetTools/` — a stdlib-only utility for reordering and deterministically
+shuffling scene folders without breaking scene identity or temporal order.
+
+- `DatasetTools/scene_organizer.py` — CLI + library: discovery, validation
+  (duplicates, missing sequence numbers, inconsistent scene assignment,
+  ambiguous filenames), three ordering modes (`temporal`, `scene-shuffle`,
+  `frame-shuffle`), non-destructive output with a full original→new mapping,
+  and `--revert`.
+- `DatasetTools/scene_loader.py` — `ordered_frames()` / `iter_scenes()` to
+  replace ad-hoc `os.listdir()` + `sorted()` in the frame-extraction and
+  temporal-segmentation code, fixing the `frame_1, frame_10, frame_2` bug.
+- `DatasetTools/tests/` — 30 tests covering ordering, shuffling determinism,
+  validation and reversibility.
+
+This slots between Phase 2 (Frame Extraction) and Phase 4 (Binary Anomaly
+Detection): scene-level shuffling is used to build splits while every clip fed
+to TimeSformer stays temporally contiguous. See `DatasetTools/README.md`.
