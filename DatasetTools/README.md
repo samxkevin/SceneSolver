@@ -1,4 +1,4 @@
-# DatasetTools — SceneSolver scene organization
+# DatasetTools : SceneSolver scene organization
 
 [![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![Dataset Tools](https://img.shields.io/badge/Dataset-Tools-000000?style=for-the-badge)](.)
