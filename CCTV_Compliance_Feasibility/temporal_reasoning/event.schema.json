@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/cctv-feasibility/event.schema.json",
+  "title": "CCTV temporal observation or event",
+  "type": "object",
+  "required": ["event_id", "event_type", "camera_id", "time", "provenance", "quality"],
+  "properties": {
+    "event_id": {"type": "string"},
+    "event_type": {"type": "string"},
+    "camera_id": {"type": "string"},
+    "entity_refs": {"type": "array", "items": {"type": "string"}},
+    "time": {
+      "type": "object",
+      "required": ["start", "end", "clock_domain"],
+      "properties": {
+        "start": {"type": "string", "format": "date-time"},
+        "end": {"type": ["string", "null"]},
+        "clock_domain": {"enum": ["source", "monotonic-derived", "sensor"]},
+        "max_gap_ms": {"type": "integer", "minimum": 0},
+        "complete": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "attributes": {"type": "object"},
+    "geometry": {
+      "type": "object",
+      "properties": {
+        "bbox_xyxy": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "number"}},
+        "zone_id": {"type": "string"},
+        "calibration_version": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "quality": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": {"enum": ["observed", "unknown", "degraded", "camera_unhealthy"]},
+        "model_score": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "track_quality": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "occluded": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["source_type", "source_id", "model_version"],
+      "properties": {
+        "source_type": {"enum": ["detector", "tracker", "pose", "ocr", "audio", "sensor", "rule", "human"]},
+        "source_id": {"type": "string"},
+        "model_version": {"type": ["string", "null"]},
+        "input_frame_ids": {"type": "array", "items": {"type": "string"}},
+        "parent_event_ids": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "privacy": {
+      "type": "object",
+      "properties": {
+        "classification": {"enum": ["metadata", "appearance_feature", "image", "video", "audio", "biometric_candidate"]},
+        "egress_allowed": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

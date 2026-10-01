@@ -1,0 +1,53 @@
+study_id: cctv-feasibility-001
+status: template
+owner_rules: [rule-a, rule-b, rule-c]
+dataset:
+  manifest: data/manifest.jsonl
+  source_split: group_by_camera_and_time
+  train: null
+  calibration: null
+  validation: null
+  test: null
+  annotations: event_boundaries_and_track_ids
+  conditions: [day, night, low_light, occlusion, crowd, compression]
+video:
+  resolution: null
+  encoded_fps: null
+  sampled_fps: [1, 2, 5, 10]
+  clip_duration_s: null
+  roi: configured_per_camera
+models:
+  detector: exact-model-id-and-commit
+  tracker: exact-implementation-and-commit
+  temporal: none-or-exact-model-id
+  precision: [fp32, fp16, int8]
+runtime:
+  framework: exact-version
+  provider: cpu-or-openvino-or-cuda-or-tensorrt
+  batch_size: [1]
+  threads: null
+hardware:
+  cpu_laptop: exact-device
+  integrated: exact-device
+  workstation_gpu: exact-device
+  edge_gpu: exact-device
+metrics:
+  detector: [precision, recall, map50_95, small_object_recall, calibration_ece]
+  tracker: [hota, mota, idf1, id_switches, track_fragmentation]
+  temporal: [segment_f1, boundary_error_ms, event_recall]
+  rule: [precision, recall, f1, false_alerts_per_camera_hour, unknown_rate]
+  system: [p50_latency_ms, p95_latency_ms, p99_latency_ms, dropped_frames, queue_age_ms, startup_s]
+  resources: [rss_mb, peak_ram_mb, peak_vram_mb, watts, temperature_c]
+acceptance:
+  # Deliberately blank: owners must set rule-specific gates.
+  observation_recall: null
+  event_recall: null
+  max_false_alerts_per_camera_hour: null
+  max_p95_alert_latency_ms: null
+  max_memory_mb: null
+  max_power_watts: null
+artifacts:
+  code_commit: null
+  dataset_manifest_hash: null
+  model_hashes: []
+  raw_results_path: results/
