@@ -4,7 +4,7 @@
 
 Every candidate is judged on routine-event reliability, event latency, privacy exposure, deterministic replay, configurability, interpretability, hardware cost, model update burden, multi-camera scaling and failure containment.
 
-## A — Single multimodal model
+## A - Single multimodal model
 
 ```text
 video or sampled frames -> VLM/video foundation model -> violation text/JSON -> alert
@@ -19,7 +19,7 @@ video or sampled frames -> VLM/video foundation model -> violation text/JSON -> 
 
 **Disposition:** optional review layer; reject as the default compliance authority.
 
-## B — Specialised CV pipeline
+## B - Specialised CV pipeline
 
 ```text
 detector -> tracker -> optional action/pose/OCR -> deterministic geometry/timers/rules -> evidence
@@ -31,7 +31,7 @@ detector -> tracker -> optional action/pose/OCR -> deterministic geometry/timers
 
 **Disposition:** default for routine events and edge-first deployment.
 
-## C — Hierarchical pipeline
+## C - Hierarchical pipeline
 
 ```text
 always-on cheap stages -> temporal state -> rule engine -> selective expensive stage
@@ -44,14 +44,14 @@ The expensive stage may be invoked on uncertainty, a candidate event, a new came
 
 **Disposition:** leading architecture.
 
-## D — Hybrid deterministic + VLM
+## D - Hybrid deterministic + VLM
 
 Same as C, but the VLM receives a bounded, redacted evidence package and must return a schema-constrained assessment with cited frame/timestamp references. The deterministic rule engine remains authoritative.
 
 **Appropriate for:** “is the required action visibly complete?”, ambiguous object/action labels, report drafting and analyst search.
 **Not appropriate for:** final authorization, identity adjudication, continuous timers, or irreversible automated decisions.
 
-## E — Sensor-assisted compliance system
+## E - Sensor-assisted compliance system
 
 ```text
 CCTV perception + access control / gate contact / POS / PLC / schedule events
@@ -78,7 +78,7 @@ This is a fundamentally important alternative. A gate contact sensor may be more
 
 ## Decision
 
-Build and benchmark **C + E where available**, with D as an optional controlled escalation. Use B as the CPU and correctness baseline. Keep A as a research comparison only.
+The descriptive target is **Hierarchical Event Driven Architecture with Sensor Integration and Optional VLM Escalation**. Internally, this maps to C as the hierarchical core, E where trusted sensors are available, and D as optional controlled escalation. Use B as the specialised CV correctness baseline and A as a research comparison only. Benchmark all four operational arms through [`../baseline/empirical-comparison-plan.md`](../baseline/empirical-comparison-plan.md).
 
 ## Rejected shortcuts
 

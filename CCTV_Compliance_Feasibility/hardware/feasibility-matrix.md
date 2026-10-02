@@ -1,6 +1,6 @@
 # Hardware Feasibility Matrix
 
-These are capability hypotheses and deployment boundaries, not claimed FPS. Measure with the protocol in `../experiments/experiment-matrix.md`.
+These are capability hypotheses and deployment boundaries, not claimed FPS or camera capacity. Measure with the protocol in `../experiments/experiment-matrix.md` and cost dimensions in [`tco-framework.md`](tco-framework.md).
 
 ## Tiers
 
@@ -54,7 +54,7 @@ Then include decode, tracker, rule, evidence, safety margin and concurrent workl
 ## Hardware facts used as context
 
 - OpenVINO documentation lists CPU, integrated/discrete Intel GPU and NPU support classes, subject to drivers and operator support.
-- NVIDIA's Jetson Orin Nano Super guide lists up to 67 INT8 TOPS, 8GB memory and configurable 7–25W; these are hardware ceilings/context, not a CCTV throughput promise.
+- NVIDIA's Jetson Orin Nano Super guide lists up to 67 INT8 TOPS, 8GB memory and configurable 7-25W; these are hardware ceilings/context, not a CCTV throughput promise.
 - Intel product briefs advertise “up to” platform TOPS for selected Core Ultra SKUs; SKU, thermal and runtime matter.
 
 See [`../research/sources.md`](../research/sources.md) for official links and conditions.

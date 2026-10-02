@@ -2,7 +2,7 @@
 
 ## Decision under study
 
-The leading architecture is a **hierarchical, event-driven hybrid**:
+The leading architecture is a **Hierarchical Event Driven Architecture with Sensor Integration and Optional VLM Escalation**:
 
 ```text
 CCTV / RTSP
@@ -62,6 +62,9 @@ The repository evidence is meaningful but narrow: a binary TimeSformer test repo
 6. Quantised exports are compared to a floating baseline on the same clips and target hardware.
 7. Evidence is sufficient for a reviewer while retention and cloud transfer remain policy-approved.
 8. A human-review path exists for ambiguous or high-impact cases.
+9. Each retained stage has measured incremental value, resource cost, privacy review, licensing clearance and reliability approval.
+10. Total cost includes amortisation, power, storage, bandwidth, cloud GPU, egress, maintenance and cameras per device.
+11. Unknown and degraded states are explicit and cannot silently satisfy a rule.
 
 ## Claims not yet established
 

@@ -8,6 +8,16 @@
 - Existing `DatasetTools` pytest suite: not run successfully because `pytest` is not installed in the execution environment (`/usr/bin/python: No module named pytest`). No existing source files were changed to work around this.
 - Model/hardware runtime benchmarks: intentionally not run. The repository does not contain the target CCTV streams, external checkpoints or a declared target hardware matrix; the experiment plan records the missing inputs rather than fabricating numbers.
 
+## 2026-10-02 refinement checks
+
+- Relative Markdown links: passed for all study Markdown files.
+- JSON/YAML parse: passed for all study `.json` and `.yaml` files with the repository's existing `js-yaml` dependency.
+- `git diff --cached --check`: passed after staging the dedicated study folder.
+- Trailing whitespace: removed and rechecked with no remaining lines.
+- Em dash and en dash scan: passed with zero remaining U+2014 or U+2013 characters in the study folder.
+- External research links: official model and licensing pages were checked during research lookup; the sandbox's direct `curl` path does not provide reliable HTTP results for all external hosts, so URL reachability is not treated as proof of source validity.
+- Deployment benchmarks, camera capacity, power and cost: intentionally not run because target streams, exact checkpoints, target hardware, region and owner thresholds remain open.
+
 ## Interpretation
 
 The study artifacts are syntactically checked where tooling was available. Syntax validation does not validate rule semantics, model accuracy, privacy compliance or production readiness. Those require the experiments and organisational reviews described in the report.

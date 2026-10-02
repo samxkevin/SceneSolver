@@ -36,7 +36,7 @@ This analysis reads tracked README/Insights/notebooks and committed output artif
 
 ## Important internal inconsistencies or risks
 
-- The README says the multiclass head covers 13–14 crime categories, while the final training notebook defines seven classes and the committed report contains seven classes. The baseline report must use the measured seven-class artifact, not the broader prose claim.
+- The README says the multiclass head covers 13-14 crime categories, while the final training notebook defines seven classes and the committed report contains seven classes. The baseline report must use the measured seven-class artifact, not the broader prose claim.
 - The binary report records accuracy on 30 samples; this is too small to infer production generalisation and has no camera/site/time split in the artifact.
 - The multiclass notebook balances classes by duplicating paths before train/validation/test splitting. Unless the external data and split code prove otherwise, identical videos may cross partitions, creating potential leakage. This must be audited before treating 0.842857 as a clean estimate.
 - The report-generation sample emits many repeated captions/labels over a 112.2-second 320x240 file, but no ground truth or reviewer assessment proves that “44 anomalies” are true violations.
@@ -72,13 +72,14 @@ This analysis reads tracked README/Insights/notebooks and committed output artif
 
 ## Baseline experiment definition
 
-Run three arms on the same labelled, site-like clips:
+Run four operational arms on the same labelled, site-like replay inputs using the protocol in [`empirical-comparison-plan.md`](empirical-comparison-plan.md):
 
-- **A0:** sampled small detector + tracker + geometry + deterministic rules;
-- **A1:** A0 + SceneSolver AE/CLIP candidate signal;
-- **A2:** A0 + selected TimeSformer/VideoMAE action model or VLM review.
+- **S0:** SceneSolver reference pipeline, with core and optional stages reported separately;
+- **S1:** specialised CV detector + tracker + geometry + deterministic rules;
+- **S2:** hierarchical event-driven core with typed state, evidence and deterministic rules;
+- **S3:** S2 plus bounded optional VLM review.
 
-Compare rule-event recall, false alerts/camera-hour, boundary error, alert latency, resource use, evidence sufficiency and privacy export volume. This tests whether SceneSolver adds value rather than assuming that all stages should be retained.
+Measure total runtime, per-stage latency, RAM, VRAM, frames decoded/processed/skipped/dropped, outputs, false alerts, misses, report generation time, evidence quality and failure cases. This tests whether SceneSolver or any added stage provides incremental value rather than assuming that all stages should be retained.
 
 ## Final baseline conclusion
 

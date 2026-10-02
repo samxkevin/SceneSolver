@@ -25,7 +25,7 @@ Split by camera/site/time/person/session where possible; never let near-duplicat
 | E-05 | Which action formulation works? | smoking/required-action temporal labels with hard negatives | tiny feature model vs TCN/GRU vs video transformer/VLM | segment F1, event recall, boundary error, calibration | no generic action claim; per-rule result |
 | E-06 | Does anomaly detection help? | normal + labelled unusual/permitted events | AE/CLIP baseline, sampled stream | AUROC/AUPRC only as candidate, alert workload, novelty-to-violation precision | use only for candidate generation if value is proven |
 | E-07 | Does quantisation preserve behavior? | fixed held-out clips including rare cases | FP32/FP16/INT8/INT4 where supported | delta event recall, calibration, p95 latency, memory | reject any unacceptable rare-rule regression or fallback |
-| E-08 | CPU feasibility | representative 30–60 min per camera | exact laptop, cold/warm, long soak | FPS, p95 per stage, CPU/RAM/temp/power, drop rate | owner-defined cameras and latency gate |
+| E-08 | CPU feasibility | representative 30-60 min per camera | exact laptop, cold/warm, long soak | FPS, p95 per stage, CPU/RAM/temp/power, drop rate | owner-defined cameras and latency gate |
 | E-09 | iGPU/NPU feasibility | same as E-08 | exact integrated device/provider/driver | same; include CPU fallback detection | prove benefit over CPU, not just device support |
 | E-10 | edge GPU capacity | multi-camera replay | exact device, 1..N cameras, thermal steady state | concurrency, p95 alert latency, VRAM/power, drops | maximum safe camera count with margin |
 | E-11 | cloud/VLM value | selected bounded evidence with blinded labels | exact cloud model/region/batch | review accuracy, grounded citation rate, latency, cost, egress volume | use only if incremental value justifies privacy/cost |
@@ -34,6 +34,23 @@ Split by camera/site/time/person/session where possible; never let near-duplicat
 | E-14 | evidence quality | reviewer study on blinded cases | local and hybrid export modes | condition citation coverage, reviewer agreement, timestamp error, storage/event | owner/security approval |
 | E-15 | robustness | night, blur, rain, crowd, occlusion, camera motion, codec, network loss | stratified target hardware | per-condition event metrics, unknown rate, recovery time | no aggregate-only approval |
 | E-16 | drift monitoring | rolling post-pilot sample + labels | production shadow | score/feature drift, alert rate, review correction, calibration | trigger retraining/recalibration/rollback policy |
+
+## E-17: Same-input architecture comparison
+
+Run four arms on the same frozen replay manifest and rule definitions:
+
+| Arm | Definition | Required measurements |
+|---|---|---|
+| S0 | SceneSolver reference pipeline, core and optional stages reported separately | total and stage latency, RAM/VRAM, frames, outputs, false alerts, misses, report time, failure cases |
+| S1 | specialised detector + tracker + geometry + deterministic rules | same measurements plus rule-event quality |
+| S2 | hierarchical typed event/state core with deterministic rules and bounded evidence | same measurements plus queue/unknown/degraded state |
+| S3 | S2 plus bounded optional VLM review | same measurements plus VLM grounded review accuracy, citations, privacy export and per-call cost |
+
+The harness records unavailable fields as `not_available`, not zero. It keeps cold/warm startup separate and never silently substitutes a different SceneSolver checkpoint or data path. Full protocol: [`../baseline/empirical-comparison-plan.md`](../baseline/empirical-comparison-plan.md).
+
+## E-18: Ablation retention ladder
+
+Add components in order: detector/tracker/rules, temporal model, anomaly candidate generation, VLM review, sensor integration. For each addition measure incremental rule recall, false alerts, misses, unknown rate, latency, RAM/VRAM, frames processed, power, privacy exposure, storage, cloud/egress cost, licensing and failure recovery. Retain only after measurement, incremental-value, resource, privacy and reliability gates pass. Full protocol: [`ablation-ladder.md`](ablation-ladder.md).
 
 ## Latency decomposition
 

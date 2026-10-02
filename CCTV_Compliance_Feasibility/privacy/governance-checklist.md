@@ -1,6 +1,6 @@
 # Privacy, Security and Compliance Review Checklist
 
-Technical feasibility does not establish legal or organisational permission. Before a pilot or production deployment, route this checklist to legal, privacy, security, compliance, HR and relevant operational owners.
+Technical feasibility does not establish legal or organisational permission. In this study, compliance means adherence to owner-defined operational policies only. Legal, regulatory, privacy, security, employment/HR and governance compliance are separate review domains. Before a pilot or production deployment, route this checklist to legal, privacy, security, compliance, HR and relevant operational owners.
 
 ## Purpose and necessity
 
