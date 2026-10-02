@@ -221,6 +221,16 @@ Earlier React/HTML prototypes are preserved under [`WebApp/`](WebApp/).
 
 ---
 
+## CCTV Compliance Feasibility Study
+
+A separate feasibility study for adapting the project's computer vision capabilities to **CCTV compliance and event monitoring**. It evaluates architecture, perception and tracking, temporal reasoning, configurable rules, evidence design, hardware and deployment tradeoffs, privacy and governance boundaries, model selection, and validation experiments.
+
+📖 **Study documentation:** [`CCTV_Compliance_Feasibility/`](CCTV_Compliance_Feasibility/)
+
+The study is a **feasibility and architecture assessment**, not a production CCTV deployment. Its P0 artifacts establish selected contracts and deterministic rule/replay checks while leaving representative data and target hardware validation as explicit next steps.
+
+---
+
 ## Dataset and preprocessing / training workflow
 
 SceneSolver is built around **UCF-Crime**-style classwise surveillance footage.
