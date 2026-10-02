@@ -39,10 +39,10 @@ The SceneSolver result is repository evidence plus artifact inspection. It is no
 Run from the repository root:
 
 ```bash
-python CCTV_Compliance_Feasibility/experiments/p0/run_rule_tests.py
-python CCTV_Compliance_Feasibility/experiments/p0/replay_harness.py
-python CCTV_Compliance_Feasibility/experiments/p0/specialised_cv_reference.py
-python CCTV_Compliance_Feasibility/experiments/p0/scenesolver_baseline_inspection.py
+python CCTV-Compliance-Feasibility/experiments/p0/run_rule_tests.py
+python CCTV-Compliance-Feasibility/experiments/p0/replay_harness.py
+python CCTV-Compliance-Feasibility/experiments/p0/specialised_cv_reference.py
+python CCTV-Compliance-Feasibility/experiments/p0/scenesolver_baseline_inspection.py
 ```
 
 The scripts use only the Python standard library. Wall-time values are measurements of this small synthetic contract harness or artifact inspection. They are not CCTV inference latency, camera throughput, deployment FPS or real-time system performance.
