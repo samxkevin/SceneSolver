@@ -21,7 +21,7 @@ Given a surveillance video, the system:
 1. Extracts frames and derives a per-frame anomaly signal.
 2. Decides **anomaly vs. normal** with a fine-tuned video transformer.
 3. If anomalous, classifies the **incident category** (e.g. `TheftOrLarceny`,
-   `Aggression`, `Firebombing` — see `Timesformer/classification_report_TFM.json`).
+   `Aggression`, `Firebombing` : see `Timesformer/classification_report_TFM.json`).
 4. Runs conditional **weapon/object detection** on the relevant keyframes.
 5. Extracts **acoustic features** from the audio track as an environmental signal.
 6. Fuses every stage into a single reasoning trace with an explicit verdict.
@@ -38,12 +38,12 @@ escalate on its own.
 ## High-level multimodal pipeline
 
 The orchestrated execution order implemented in [`Orchestrator.ipynb`](Orchestrator.ipynb)
-("Scene Solver v3 — Coherent Reasoning System"):
+("Scene Solver v3 : Coherent Reasoning System"):
 
 | Stage | Component | Role |
 |---|---|---|
 | 0 | **AutoEncoder (AE)** | Primary anomaly signal, batched reconstruction error |
-| 1 | **TimeSformer Binary** | Semantic understanding — anomaly / normal |
+| 1 | **TimeSformer Binary** | Semantic understanding : anomaly / normal |
 | 2 | **TimeSformer Multi-class** | Fine-grained incident classification |
 | 3 | **YOLO Weapon** *(experimental)* | Hard safety trigger, conditional |
 | 4 | **Audio Feature Extraction** | Environmental / acoustic signal |
@@ -91,23 +91,23 @@ as a weapon/dangerous-object safety trigger, not on every frame.
 ### LLaVA contextual explanation
 `LlavaForConditionalGeneration` ingests multiple keyframes and synthesises them
 into one coherent scene narrative for the report. Training notebook and the
-instruction-tuning manifests are in [`LLaVa/`](LLaVa/) — the manifests follow a
+instruction-tuning manifests are in [`LLaVa/`](LLaVa/) : the manifests follow a
 JSONL schema with an `image` path and a user/assistant `conversations` pair.
 
 ### Audio analysis
 Three distinct pieces:
 
-- **In-pipeline acoustic features** (Stage 4) extracted with `librosa` —
+- **In-pipeline acoustic features** (Stage 4) extracted with `librosa` :
   `rms`, `zcr`, `spectral_centroid`, `spectral_flux` and `mfcc`, each normalised
   to 0–1 against global ranges and combined into a weighted composite score.
   Classification rule: 2+ features above 0.4 = `ANOMALY`, 1 = `SUSPICIOUS`,
   0 = `NORMAL`. Audio is optional; the stage degrades gracefully when `librosa`
   is unavailable or the track is silent.
-- **Spectrogram anomaly detection** — a convolutional autoencoder trained
+- **Spectrogram anomaly detection** : a convolutional autoencoder trained
   unsupervised on mel-spectrograms of normal surveillance audio
   ([`SpectrogramAnalysis/`](SpectrogramAnalysis/)), with a checkpoint, training
   curves and results JSON included.
-- **LFM2.5-Audio speech interface** — `LiquidAI/LFM2.5-Audio-1.5B` via the
+- **LFM2.5-Audio speech interface** : `LiquidAI/LFM2.5-Audio-1.5B` via the
   `liquid-audio` package, used as the speech bridge for the Sherl0ck agent
   (see below): ASR for the analyst's speech and TTS for the agent's replies.
 
@@ -119,32 +119,32 @@ Three distinct pieces:
 The **LFM2.5-Audio-1.5B** model (~3.65 GB, lazily loaded on first use, moved to
 CUDA when available) performs both directions of the voice interface:
 
-- **ASR** — `ChatState` with a `"Perform ASR."` system turn transcribes the
+- **ASR** : `ChatState` with a `"Perform ASR."` system turn transcribes the
   analyst's recorded utterance. Output is stripped of special tokens and
   rejected if it looks like non-English/garbled decoding.
-- **TTS** — a `"Perform TTS. Use the US male voice."` system turn generates
+- **TTS** : a `"Perform TTS. Use the US male voice."` system turn generates
   audio codes, decoded to a 24 kHz waveform. Every generated file is validated
   (RIFF/WAVE header, sample rate, frame count) before being returned.
 
-LFM handles **speech only** — the reasoning is Cohere's. Availability is
+LFM handles **speech only** : the reasoning is Cohere's. Availability is
 detected at import; the voice layer degrades cleanly when `liquid-audio` is
 absent.
 
-### Sherl0ck — agentic escalation layer
+### Sherl0ck : agentic escalation layer
 A voice-driven escalation agent layered on top of the finished analysis. When a
 run crosses the critical threshold, the app can place a simulated call: the
 browser records the analyst with client-side VAD and `MediaRecorder`, posts the
 WebM/Opus blob to a same-origin FastAPI route mounted on the Gradio app
 (`POST /ssvoice/turn`, with `/ssvoice/health`, `/ssvoice/end`, `/ssvoice/accept`
-and `/ssvoice/ringtone` alongside), and gets spoken audio back — with barge-in
+and `/ssvoice/ringtone` alongside), and gets spoken audio back : with barge-in
 supported mid-reply.
 
 The turn loop is: **LFM ASR → Cohere reasoning (`ClientV2`) → LFM TTS**. The
 agent is briefed with the full case context so it can answer questions about the
 specific incident rather than in the abstract.
 
-Escalation itself is threshold-driven — `THRESH_CRITICAL = 0.90` and
-`THRESH_HIGH = 0.70` — and a critical result can auto-dispatch the peak-anomaly
+Escalation itself is threshold-driven : `THRESH_CRITICAL = 0.90` and
+`THRESH_HIGH = 0.70` : and a critical result can auto-dispatch the peak-anomaly
 frame and the forensic PDF to Telegram, Discord and email.
 
 ### Forensic report generation
@@ -239,13 +239,13 @@ The phased workflow documented in [`Insights.md`](Insights.md):
 | Phase | Step |
 |---|---|
 | 0 | Raw `.mp4` videos in classwise folders |
-| 1 | **Dataset integrity** — verify every file against `train.txt`, no broken paths |
-| 2 | **Frame extraction** — uniform or length-adaptive sampling per video |
-| 3 | **CLIP keyframe selection** — rank and keep action-representative frames |
-| 4 | **Binary anomaly detection** — train/fine-tune TimeSformer |
-| 5 | **Incident classification** — fine-tune the classifier head on anomalies only |
-| 6 | **Evidence extraction** — YOLOv8 on anomalous keyframes |
-| 7 | **Report generation** — LLaVA over keyframes + detections |
+| 1 | **Dataset integrity** : verify every file against `train.txt`, no broken paths |
+| 2 | **Frame extraction** : uniform or length-adaptive sampling per video |
+| 3 | **CLIP keyframe selection** : rank and keep action-representative frames |
+| 4 | **Binary anomaly detection** : train/fine-tune TimeSformer |
+| 5 | **Incident classification** : fine-tune the classifier head on anomalies only |
+| 6 | **Evidence extraction** : YOLOv8 on anomalous keyframes |
+| 7 | **Report generation** : LLaVA over keyframes + detections |
 
 Frame-naming conventions already produced by the extractors in this repository:
 
@@ -265,32 +265,32 @@ A **scene** is one directory named after the source video id, e.g.
 [`DatasetTools/`](DatasetTools/) is the dataset preparation module that sits
 between **Phase 2 (frame extraction)** and **Phase 4 (training)**. It exists
 because naive `sorted(os.listdir(...))` orders frames as
-`frame_1, frame_10, frame_2` — silently corrupting the temporal sequence fed to
+`frame_1, frame_10, frame_2` : silently corrupting the temporal sequence fed to
 TimeSformer.
 
 It provides:
 
-- **Deterministic scene/frame ordering** — parses frame numbers, `<frame>_<variant>`
+- **Deterministic scene/frame ordering** : parses frame numbers, `<frame>_<variant>`
   pairs, `hh:mm:ss` timestamps and millisecond tokens, always preferring explicit
   numeric/temporal evidence over lexicographic sorting.
-- **Scene-level shuffling** — shuffles scene order for train/val splits while
+- **Scene-level shuffling** : shuffles scene order for train/val splits while
   every clip stays temporally contiguous.
-- **Frame-level randomization** — opt-in, for ablations; scene grouping is
+- **Frame-level randomization** : opt-in, for ablations; scene grouping is
   still never broken.
-- **Reproducible seeds** — per-scene RNG streams, so the same seed always yields
+- **Reproducible seeds** : per-scene RNG streams, so the same seed always yields
   the same output and adding a scene cannot perturb another's permutation.
-- **Validation** — duplicate filenames, duplicate content by SHA-256, missing
+- **Validation** : duplicate filenames, duplicate content by SHA-256, missing
   sequence numbers (with sampled-step awareness), files assigned to inconsistent
   scenes, and files that cannot be confidently ordered. Nothing is silently
   discarded.
-- **Reversible, non-destructive preparation** — the input tree is read-only,
+- **Reversible, non-destructive preparation** : the input tree is read-only,
   output goes to a separate directory (hardlink by default), a full
   original → new mapping is written, and `--revert` undoes the operation.
 
 Quick start:
 
 ```bash
-# validate only — writes nothing
+# validate only : writes nothing
 python DatasetTools/scene_organizer.py -i outputs/frames --dry-run
 
 # deterministic training split
@@ -310,7 +310,7 @@ from DatasetTools.scene_loader import ordered_frames, iter_scenes
 frames = ordered_frames(frames_dir)          # frame_1, frame_2, frame_10
 ```
 
-📖 **Full module documentation: [`DatasetTools/README.md`](DatasetTools/README.md)**
+ **Full module documentation: [`DatasetTools/README.md`](DatasetTools/README.md)**
 
 ---
 
@@ -346,14 +346,14 @@ SceneSolver/
 
 ## Setup / usage
 
-### Easiest path — hosted demo
+### Easiest path : hosted demo
 
 Use the Hugging Face Space, no installation required:
 <https://huggingface.co/spaces/samxkevin/SceneSolver>
 
 ### DatasetTools locally
 
-DatasetTools is **pure standard library** — no third-party dependencies:
+DatasetTools is **pure standard library** : no third-party dependencies:
 
 ```bash
 git clone https://github.com/samxkevin/SceneSolver.git
@@ -412,6 +412,6 @@ any legal or enforcement decision.
 
 ## License
 
-Released under the MIT License — see [`LICENSE`](LICENSE).
+Released under the MIT License : see [`LICENSE`](LICENSE).
 
 Copyright (c) 2026 Anumula Samarth
