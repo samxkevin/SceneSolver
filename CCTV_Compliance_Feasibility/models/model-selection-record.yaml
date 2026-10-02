@@ -1,0 +1,36 @@
+# One record per model candidate. Copy and fill before a production shortlist.
+model_id: exact-family-variant-checkpoint-revision
+role: perception|tracking|temporal|anomaly|review|runtime
+source_url: null
+source_commit_or_revision: null
+code_license: null
+weights_license: null
+third_party_dependencies: []
+commercial_use: unknown
+redistribution: unknown
+attribution_required: null
+model_card_restrictions: []
+input_contract: null
+output_contract: null
+training_required: unknown
+target_rules: []
+hardware_candidates: [cpu, igpu_npu, edge_gpu, workstation_gpu, cloud_gpu]
+precision_candidates: [fp32, fp16, int8, int4]
+metrics:
+  observation_recall: null
+  rule_event_recall: null
+  false_alerts_per_camera_hour: null
+  miss_rate_per_camera_hour: null
+  p95_alert_latency_ms: null
+  peak_ram_mb: null
+  peak_vram_mb: null
+  watts: null
+  cost_per_camera_hour: null
+  privacy_exposure: null
+  evidence_quality: null
+incremental_value_over_previous_arm: null
+reliability_gate: pending
+privacy_gate: pending
+license_gate: pending
+operational_gate: pending
+decision: research-only|retain-core|retain-selective|retain-advisory|reject|pending

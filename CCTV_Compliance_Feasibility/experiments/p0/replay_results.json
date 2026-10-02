@@ -1,0 +1,199 @@
+{
+  "artifact": "P0 model-neutral replay harness",
+  "status": "measured_contract_replay",
+  "input_type": "structured_frame_replay",
+  "video_decode": "not_available; structured frames substituted",
+  "pipeline": [
+    "decode",
+    "sampling",
+    "observation",
+    "event",
+    "temporal_state",
+    "rule",
+    "evidence"
+  ],
+  "stage_wall_time_ms": {
+    "decode": 0.0,
+    "sampling": 0.001,
+    "observation": 0.018,
+    "event": 0.078,
+    "temporal_state": 0.002,
+    "rule": 0.051,
+    "evidence": 0.051
+  },
+  "total_wall_time_ms": 0.292,
+  "stream": {
+    "camera_id": "cam-p0",
+    "source_fps": 2,
+    "frames_decoded": 13,
+    "frames_processed": 7,
+    "frames_skipped": 6,
+    "frames_dropped": 0
+  },
+  "outputs": {
+    "observations": 7,
+    "events": 3,
+    "event_trace": [
+      {
+        "event_id": "r-entry-p1",
+        "event_type": "person.entered_zone",
+        "camera_id": "cam-p0",
+        "time": {
+          "start": "2026-01-01T00:00:01Z",
+          "end": "2026-01-01T00:00:01Z",
+          "clock_domain": "monotonic-derived",
+          "complete": true
+        },
+        "attributes": {
+          "zone": "restricted",
+          "subject": "p1"
+        },
+        "quality": {
+          "status": "observed",
+          "track_quality": 1.0
+        },
+        "provenance": {
+          "source_type": "tracker",
+          "source_id": "p0-replay",
+          "model_version": null
+        },
+        "privacy": {
+          "classification": "metadata",
+          "egress_allowed": false
+        }
+      },
+      {
+        "event_id": "r-inside-p1",
+        "event_type": "person.inside_zone",
+        "camera_id": "cam-p0",
+        "time": {
+          "start": "2026-01-01T00:00:01Z",
+          "end": "2026-01-01T00:00:06Z",
+          "clock_domain": "monotonic-derived",
+          "complete": false
+        },
+        "attributes": {
+          "zone": "restricted",
+          "subject": "p1",
+          "interval_status": "open",
+          "observed_duration_s": 5.0,
+          "exit_observed": false,
+          "end_reason": "stream_end"
+        },
+        "quality": {
+          "status": "observed",
+          "track_quality": 1.0
+        },
+        "provenance": {
+          "source_type": "tracker",
+          "source_id": "p0-replay",
+          "model_version": null
+        },
+        "privacy": {
+          "classification": "metadata",
+          "egress_allowed": false
+        }
+      },
+      {
+        "event_id": "r-health",
+        "event_type": "camera.health",
+        "camera_id": "cam-p0",
+        "time": {
+          "start": "2026-01-01T00:00:00Z",
+          "end": "2026-01-01T00:00:06Z",
+          "clock_domain": "monotonic-derived",
+          "complete": true
+        },
+        "attributes": {
+          "status": "healthy"
+        },
+        "quality": {
+          "status": "observed",
+          "track_quality": 1.0
+        },
+        "provenance": {
+          "source_type": "sensor",
+          "source_id": "p0-replay",
+          "model_version": null
+        },
+        "privacy": {
+          "classification": "metadata",
+          "egress_allowed": false
+        }
+      }
+    ],
+    "temporal_state": {
+      "tracks": [
+        {
+          "track_id": "p1",
+          "observed_frames": 7,
+          "inside_zone": true
+        }
+      ],
+      "intervals": [
+        {
+          "event_id": "r-inside-p1",
+          "start_s": 1.0,
+          "observed_end_s": 6.0,
+          "observed_duration_s": 5.0,
+          "status": "open",
+          "exit_observed": false,
+          "end_reason": "stream_end"
+        }
+      ]
+    },
+    "temporal_tracks": 1,
+    "rule_decision": {
+      "raw_status": "true",
+      "decision": "confirmed",
+      "exception_statuses": [],
+      "qualifying_interval_start_s": [
+        1.0
+      ],
+      "cooldown_s": 30.0,
+      "cooldown_qualified_interval_start_s": [
+        1.0
+      ],
+      "cooldown_qualified_interval_count": 1,
+      "online_alert_latency_ms": "not_available"
+    },
+    "evidence": {
+      "manifest": {
+        "camera_id": "cam-p0",
+        "rule_id": "p0_zone_dwell",
+        "event_ids": [
+          "r-entry-p1",
+          "r-inside-p1"
+        ],
+        "source_frame_ids": [
+          0,
+          2,
+          4,
+          6,
+          8,
+          10,
+          12
+        ],
+        "privacy": "metadata_only",
+        "interval_status": "open",
+        "observed_duration_s": 5.0,
+        "exit_observed": false,
+        "evidence_scope": "up_to_stream_end"
+      },
+      "sha256": "0f823e8af987c1b041e103bb5f3b8fac5a7e6a28014d4d76fff7c4026d5010f3",
+      "bounded": true
+    }
+  },
+  "semantic_checks": {
+    "interval_is_open_when_stream_ends_inside": true,
+    "exit_event_fabricated": false,
+    "observed_duration_distinguished_from_completed_interval": true
+  },
+  "schema_errors": [],
+  "limitations": [
+    "No video decoder or visual detector was run; input detections are synthetic precomputed observations.",
+    "The tracker is a single-track adapter using track_hint, not a MOT evaluation.",
+    "The final frame leaves the interval open: observed duration reaches stream end and no exit event is fabricated.",
+    "Runtime values measure this synthetic contract replay only and are not CCTV inference latency, camera throughput, deployment FPS or real-time system performance."
+  ]
+}

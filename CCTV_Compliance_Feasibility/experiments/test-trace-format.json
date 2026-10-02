@@ -1,0 +1,23 @@
+{
+  "run_id": "run-utc-device-model",
+  "dataset_manifest_sha256": "",
+  "software": {"git_commit": "", "runtime": "", "driver": ""},
+  "hardware": {"device": "", "power_mode": "", "temperature_start_c": null},
+  "stream": {"camera_id": "", "resolution": "", "encoded_fps": null, "codec": "", "duration_s": null},
+  "inference": {"sample_fps": null, "detector_interval": null, "roi": null, "batch": 1, "precision": "", "provider": ""},
+  "models": {"detector": "", "tracker": "", "temporal": "", "rule_version": ""},
+  "results": {
+    "frames_decoded": null,
+    "frames_processed": null,
+    "frames_dropped": null,
+    "latency_ms": {"decode_p95": null, "inference_p95": null, "rule_p95": null, "alert_p95": null},
+    "memory_mb": {"rss_peak": null, "ram_peak": null, "vram_peak": null},
+    "power_watts": null,
+    "temperature_max_c": null,
+    "detector": {"precision": null, "recall": null, "calibration_ece": null},
+    "tracking": {"hota": null, "idf1": null, "id_switches": null},
+    "rules": {"precision": null, "recall": null, "false_alerts_per_camera_hour": null, "unknown_rate": null},
+    "evidence": {"usable_rate": null, "bytes_per_event": null}
+  },
+  "notes": ""
+}

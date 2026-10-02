@@ -1,0 +1,80 @@
+{
+  "artifact": "P0 SceneSolver baseline evidence inspection",
+  "status": "measured_repository_artifact",
+  "measurement_scope": "existing committed report artifact and repository prerequisite inspection; no retraining or inference",
+  "source_artifact": "ReportGeneration/InferenceResults/results/cctv_analysis_results/analysis.json",
+  "artifact_sha256": "ee0758501d646e8b79f5184f26b6068add39d86411fcb941c61286e3ce1e9a93",
+  "artifact_size_bytes": 35835,
+  "artifact_inspection_parse_ms": 0.341,
+  "repository_output": {
+    "metadata": {
+      "fps": 30.0,
+      "frame_count": 3366,
+      "duration": 112.2,
+      "width": 320,
+      "height": 240
+    },
+    "summary": "Detected 44 anomalies (17 instances of emergency, 8 instances of crowd, 19 instances of violence) during 1.9 minutes of footage. Further review recommended.",
+    "anomaly_records": 44,
+    "packaged_frame_files": 55,
+    "referenced_frame_paths": 44,
+    "referenced_frame_paths_missing_on_filesystem": 44,
+    "output_types": [
+      "analysis.json",
+      "JPEG evidence frame paths",
+      "summary"
+    ]
+  },
+  "measured": {
+    "artifact_parse": true,
+    "artifact_inspection_runtime_ms": 0.341,
+    "frames_processed_by_original_run": 3366,
+    "report_generation_time_ms": "not_available in committed artifact",
+    "stage_timing_ms": "not_available in committed artifact",
+    "model_inference_runtime_ms": "not_available; no reproducible inference run performed",
+    "memory_mb": "not_available",
+    "vram_mb": "not_available"
+  },
+  "prerequisites": {
+    "python_modules": {
+      "torch": false,
+      "cv2": false,
+      "numpy": false,
+      "ultralytics": false,
+      "psutil": false,
+      "jupyter": false
+    },
+    "checkpoint_paths_found_outside_study": [
+      "SpectrogramAnalysis/checkpoints/checkpoint_epoch_35.pth"
+    ],
+    "files_with_external_drive_or_pretrained_references": [
+      "LLaVa/LLaVATraining.ipynb",
+      "NewChecker.ipynb",
+      "Orchestrator.ipynb",
+      "ReportGeneration/CCTVAnalysis.ipynb",
+      "ReportGeneration/InferenceResults/results/cctv_analysis_results/analysis.json",
+      "ReportGeneration/VanillaCode/cctv_analysis_script.py",
+      "SpectrogramAnalysis/SpectrogramAnalysis.ipynb",
+      "SpectrogramAnalysis/results/anomaly_detection_results.json",
+      "Timesformer/TimeSformerBinaryTrainingCode.ipynb",
+      "Timesformer/TrainingTimeSformermerAnomalyMergedClassification.ipynb",
+      "UnrefinedCoreFuntionality/EnhancedTemporalTraining.py",
+      "UnrefinedCoreFuntionality/ExampleInference.ipynb",
+      "UnrefinedCoreFuntionality/ExplorationsInCLIP/CLIP-BasedAnamolyInference.ipynb",
+      "UnrefinedCoreFuntionality/FirstOfTheTimeSformerTrainingScripts(based-on-kaggle's-ucf-crime-dataset).ipynb",
+      "UnrefinedCoreFuntionality/ResNet18TrainingScript.ipynb",
+      "UnrefinedCoreFuntionality/TimeSformerTrainingScript(Dated15thApril).ipynb",
+      "UnrefinedCoreFuntionality/TimeSformerTrainingScript(ImprovedVersion).ipynb",
+      "autoencoderAndReinforcementLearning/RL+AE.ipynb"
+    ],
+    "source_video_found_in_repository": false
+  },
+  "failure_conditions": [
+    "The report artifact references Google Drive frame paths that are not present at those absolute paths in this checkout.",
+    "The original source video is not present in the checkout, so the report-generation run cannot be replayed from its input.",
+    "The checkout does not provide the torch/cv2/ultralytics stack needed for the relevant inference paths.",
+    "The available checkpoint inventory does not establish a runnable TimeSformer or YOLO inference configuration.",
+    "The notebook-based pipeline uses external data/checkpoint paths and is not a deterministic command-line run."
+  ],
+  "conclusion": "Repository evidence and artifact inspection are measured; SceneSolver model runtime, stage latency, memory, and target deployment capacity remain unmeasured."
+}

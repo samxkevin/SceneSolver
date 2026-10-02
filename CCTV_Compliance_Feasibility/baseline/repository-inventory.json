@@ -1,0 +1,31 @@
+{
+  "repository": "samxkevin/SceneSolver",
+  "branch": "arena/01a0f752-scenesolver",
+  "study_date_utc": "2026-10-01",
+  "purpose": "machine-readable inventory for the feasibility study; values are repository observations, not production claims",
+  "components": [
+    {"id": "dataset_tools", "paths": ["DatasetTools/"], "status": "implemented_and_tested_in_repo", "reuse": "high", "role": "deterministic temporal ordering and manifest validation", "limits": ["not an inference pipeline"]},
+    {"id": "ae_visual", "paths": ["autoencoderAndReinforcementLearning/"], "status": "implemented_experimental", "reuse": "candidate", "role": "normality/deviation signal", "limits": ["threshold and deployment metrics incomplete"]},
+    {"id": "timesformer_binary", "paths": ["Timesformer/TimeSformerBinaryTrainingCode.ipynb", "Timesformer/timesformer_binary_reslts.txt", "Timesformer/training_config_binary_TFB.json"], "status": "empirical_artifact", "reuse": "comparison_arm", "role": "binary anomaly/normal classifier", "reported": {"test_accuracy": 0.9667, "test_support": 30, "best_acc": 0.9555555555555556}, "limits": ["split/hardware/calibration not recorded in artifact", "not owner-rule recognition"]},
+    {"id": "timesformer_multiclass", "paths": ["Timesformer/TrainingTimeSformermerAnomalyMergedClassification.ipynb", "Timesformer/classification_report_TFM.json"], "status": "empirical_artifact", "reuse": "comparison_arm", "role": "seven-class incident classification", "reported": {"classes": 7, "accuracy": 0.8428571428571429, "macro_f1": 0.823513998933792, "weighted_f1": 0.8391743172464019, "support": 140}, "limits": ["README prose also says 13-14 categories", "possible duplicate-path leakage requires audit", "not owner-rule recognition"]},
+    {"id": "clip_keyframes", "paths": ["UnrefinedCoreFuntionality/ExplorationsInCLIP/"], "status": "implemented_experimental", "reuse": "candidate", "role": "prompt/keyframe candidate generation", "limits": ["not calibrated event recognition"]},
+    {"id": "yolo_detection", "paths": ["Orchestrator.ipynb", "README.md"], "status": "implemented_orchestrated_experimental", "reuse": "adapter_candidate", "role": "conditional object/weapon evidence", "limits": ["target classes and metrics absent"]},
+    {"id": "audio", "paths": ["SpectrogramAnalysis/", "README.md"], "status": "implemented_experimental", "reuse": "optional_candidate", "role": "audio features and anomaly signal", "limits": ["privacy, labels and event metrics absent"]},
+    {"id": "tracking_behaviour", "paths": ["Orchestrator.ipynb", "README.md"], "status": "pipeline_stage", "reuse": "requires_reimplementation_or_adapter", "role": "motion/behaviour context", "limits": ["no MOT or rule-level metrics found"]},
+    {"id": "rl_temporal", "paths": ["autoencoderAndReinforcementLearning/RL+AE.ipynb", "README.md"], "status": "explicitly_experimental", "reuse": "research_arm", "role": "temporal anomaly reasoning", "limits": ["A100/T4-oriented notebook cells", "not needed for deterministic timers"]},
+    {"id": "llava_explanation", "paths": ["LLaVa/", "Orchestrator.ipynb", "README.md"], "status": "explicitly_experimental", "reuse": "optional_review_arm", "role": "multi-frame narrative", "limits": ["not authoritative rule evaluation", "privacy/resource cost"]},
+    {"id": "report_generation", "paths": ["ReportGeneration/"], "status": "sample_artifacts", "reuse": "evidence_ui_concepts", "role": "PDF/HTML report and evidence frames", "reported": {"sample_fps": 30.0, "sample_frames": 3366, "sample_duration_s": 112.2, "sample_resolution": "320x240", "generated_anomaly_records": 44}, "limits": ["no ground truth/reviewer evidence"]}
+  ],
+  "repository_level_gaps": [
+    "target-site labelled rule dataset",
+    "leakage-controlled benchmark manifest",
+    "MOT/tracking metrics",
+    "calibration and camera-hour alert rates",
+    "CPU/GPU/NPU/edge latency and memory runs",
+    "power and thermal runs",
+    "end-to-end alert latency",
+    "privacy egress control plane",
+    "generic typed observation/rule contract"
+  ],
+  "recommended_disposition": "baseline_and_component_library; isolated compliance prototype before production changes"
+}

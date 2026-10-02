@@ -1,0 +1,30 @@
+{
+  "format": "structured_frame_replay",
+  "camera_id": "cam-p0",
+  "source_fps": 2,
+  "sample_every_n_frames": 2,
+  "zone": {"id": "restricted", "x_min": 50, "x_max": 110, "y_min": 30, "y_max": 110},
+  "camera_health": "healthy",
+  "frames": [
+    {"frame_id": 0, "timestamp_s": 0.0, "detections": [{"class": "person", "track_hint": "p1", "bbox": [10, 40, 30, 80]}]},
+    {"frame_id": 1, "timestamp_s": 0.5, "detections": [{"class": "person", "track_hint": "p1", "bbox": [30, 40, 50, 80]}]},
+    {"frame_id": 2, "timestamp_s": 1.0, "detections": [{"class": "person", "track_hint": "p1", "bbox": [50, 40, 70, 80]}]},
+    {"frame_id": 3, "timestamp_s": 1.5, "detections": [{"class": "person", "track_hint": "p1", "bbox": [60, 40, 80, 80]}]},
+    {"frame_id": 4, "timestamp_s": 2.0, "detections": [{"class": "person", "track_hint": "p1", "bbox": [65, 40, 85, 80]}]},
+    {"frame_id": 5, "timestamp_s": 2.5, "detections": [{"class": "person", "track_hint": "p1", "bbox": [70, 40, 90, 80]}]},
+    {"frame_id": 6, "timestamp_s": 3.0, "detections": [{"class": "person", "track_hint": "p1", "bbox": [75, 40, 95, 80]}]},
+    {"frame_id": 7, "timestamp_s": 3.5, "detections": [{"class": "person", "track_hint": "p1", "bbox": [80, 40, 100, 80]}]},
+    {"frame_id": 8, "timestamp_s": 4.0, "detections": [{"class": "person", "track_hint": "p1", "bbox": [85, 40, 105, 80]}]},
+    {"frame_id": 9, "timestamp_s": 4.5, "detections": [{"class": "person", "track_hint": "p1", "bbox": [90, 40, 110, 80]}]},
+    {"frame_id": 10, "timestamp_s": 5.0, "detections": [{"class": "person", "track_hint": "p1", "bbox": [95, 40, 115, 80]}]},
+    {"frame_id": 11, "timestamp_s": 5.5, "detections": [{"class": "person", "track_hint": "p1", "bbox": [100, 40, 120, 80]}]},
+    {"frame_id": 12, "timestamp_s": 6.0, "detections": [{"class": "person", "track_hint": "p1", "bbox": [100, 40, 120, 80]}]}
+  ],
+  "rule": {
+    "id": "p0_zone_dwell",
+    "version": 1,
+    "unknown_policy": "delay",
+    "when": {"temporal": {"operator": "for_at_least", "subject": {"event": "person.inside_zone", "args": {"zone": "restricted", "subject": "p1"}}, "duration": "3s", "max_gap": "1s"}},
+    "then": {"event_type": "compliance.violation", "action": ["evidence_capture"], "cooldown": "30s"}
+  }
+}

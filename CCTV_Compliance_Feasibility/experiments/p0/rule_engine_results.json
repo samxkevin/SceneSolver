@@ -1,0 +1,340 @@
+{
+  "artifact": "P0 rule engine validation",
+  "status": "measured_pass",
+  "implementation_scope": "synthetic evaluator for checked-in fixtures; not production rule service",
+  "input": "CCTV_Compliance_Feasibility/experiments/p0/rule_engine_cases.json",
+  "event_contract": "temporal_reasoning/event.schema.json via compact fixture adapter",
+  "rule_contract": "rule_engine/rule.schema.yaml required fields and allow-listed P0 operators",
+  "test_count": 11,
+  "failure_fixture_count": 2,
+  "passed_count": 11,
+  "failure_fixture_passed_count": 2,
+  "wall_time_ms": 0.924,
+  "tests": [
+    {
+      "id": "zone_entry_dwell_confirmed",
+      "status": "passed",
+      "expected": {
+        "expected_decision": "confirmed",
+        "expected_raw_status": "true"
+      },
+      "actual": {
+        "raw_status": "true",
+        "decision": "confirmed",
+        "exception_statuses": [],
+        "qualifying_interval_start_s": [
+          0.0
+        ],
+        "cooldown_s": 30.0,
+        "cooldown_qualified_interval_start_s": [
+          0.0
+        ],
+        "cooldown_qualified_interval_count": 1,
+        "online_alert_latency_ms": "not_available"
+      },
+      "checks": {
+        "schema_adapter_valid": true,
+        "expected_decision": true,
+        "expected_raw_status": true,
+        "deterministic_replay": true
+      },
+      "event_count": 3,
+      "validation_errors": []
+    },
+    {
+      "id": "gate_open_duration_not_triggered",
+      "status": "passed",
+      "expected": {
+        "expected_decision": "not_triggered",
+        "expected_raw_status": "false"
+      },
+      "actual": {
+        "raw_status": "false",
+        "decision": "not_triggered",
+        "exception_statuses": [],
+        "qualifying_interval_start_s": [],
+        "cooldown_s": 0.0,
+        "cooldown_qualified_interval_start_s": [],
+        "cooldown_qualified_interval_count": 0,
+        "online_alert_latency_ms": "not_available"
+      },
+      "checks": {
+        "schema_adapter_valid": true,
+        "expected_decision": true,
+        "expected_raw_status": true,
+        "deterministic_replay": true
+      },
+      "event_count": 2,
+      "validation_errors": []
+    },
+    {
+      "id": "required_action_completed_before_deadline",
+      "status": "passed",
+      "expected": {
+        "expected_decision": "not_triggered",
+        "expected_raw_status": "false"
+      },
+      "actual": {
+        "raw_status": "false",
+        "decision": "not_triggered",
+        "exception_statuses": [],
+        "qualifying_interval_start_s": [],
+        "cooldown_s": 0.0,
+        "cooldown_qualified_interval_start_s": [],
+        "cooldown_qualified_interval_count": 0,
+        "online_alert_latency_ms": "not_available"
+      },
+      "checks": {
+        "schema_adapter_valid": true,
+        "expected_decision": true,
+        "expected_raw_status": true,
+        "deterministic_replay": true
+      },
+      "event_count": 4,
+      "validation_errors": []
+    },
+    {
+      "id": "required_action_absent_before_deadline",
+      "status": "passed",
+      "expected": {
+        "expected_decision": "confirmed",
+        "expected_raw_status": "true"
+      },
+      "actual": {
+        "raw_status": "true",
+        "decision": "confirmed",
+        "exception_statuses": [],
+        "qualifying_interval_start_s": [],
+        "cooldown_s": 0.0,
+        "cooldown_qualified_interval_start_s": [],
+        "cooldown_qualified_interval_count": 0,
+        "online_alert_latency_ms": "not_available"
+      },
+      "checks": {
+        "schema_adapter_valid": true,
+        "expected_decision": true,
+        "expected_raw_status": true,
+        "deterministic_replay": true
+      },
+      "event_count": 3,
+      "validation_errors": []
+    },
+    {
+      "id": "absence_rule_healthy_window",
+      "status": "passed",
+      "expected": {
+        "expected_decision": "confirmed",
+        "expected_raw_status": "true"
+      },
+      "actual": {
+        "raw_status": "true",
+        "decision": "confirmed",
+        "exception_statuses": [],
+        "qualifying_interval_start_s": [],
+        "cooldown_s": 0.0,
+        "cooldown_qualified_interval_start_s": [],
+        "cooldown_qualified_interval_count": 0,
+        "online_alert_latency_ms": "not_available"
+      },
+      "checks": {
+        "schema_adapter_valid": true,
+        "expected_decision": true,
+        "expected_raw_status": true,
+        "deterministic_replay": true
+      },
+      "event_count": 1,
+      "validation_errors": []
+    },
+    {
+      "id": "unknown_camera_data_gap",
+      "status": "passed",
+      "expected": {
+        "expected_decision": "unknown",
+        "expected_raw_status": "unknown"
+      },
+      "actual": {
+        "raw_status": "unknown",
+        "decision": "unknown",
+        "exception_statuses": [],
+        "qualifying_interval_start_s": [],
+        "cooldown_s": 0.0,
+        "cooldown_qualified_interval_start_s": [],
+        "cooldown_qualified_interval_count": 0,
+        "online_alert_latency_ms": "not_available"
+      },
+      "checks": {
+        "schema_adapter_valid": true,
+        "expected_decision": true,
+        "expected_raw_status": true,
+        "deterministic_replay": true
+      },
+      "event_count": 2,
+      "validation_errors": []
+    },
+    {
+      "id": "cooldown_and_debounce",
+      "status": "passed",
+      "expected": {
+        "expected_decision": "confirmed",
+        "expected_raw_status": "true",
+        "expected_cooldown_qualified_interval_count": 1
+      },
+      "actual": {
+        "raw_status": "true",
+        "decision": "confirmed",
+        "exception_statuses": [],
+        "qualifying_interval_start_s": [
+          3.0,
+          8.0
+        ],
+        "cooldown_s": 10.0,
+        "cooldown_qualified_interval_start_s": [
+          3.0
+        ],
+        "cooldown_qualified_interval_count": 1,
+        "online_alert_latency_ms": "not_available"
+      },
+      "checks": {
+        "schema_adapter_valid": true,
+        "expected_decision": true,
+        "expected_raw_status": true,
+        "deterministic_replay": true,
+        "expected_cooldown_qualified_interval_count": true
+      },
+      "event_count": 4,
+      "validation_errors": []
+    },
+    {
+      "id": "exception_authorization_suppresses",
+      "status": "passed",
+      "expected": {
+        "expected_decision": "suppressed_by_exception",
+        "expected_raw_status": "true"
+      },
+      "actual": {
+        "raw_status": "true",
+        "decision": "suppressed_by_exception",
+        "exception_statuses": [
+          "true"
+        ],
+        "qualifying_interval_start_s": [],
+        "cooldown_s": 0.0,
+        "cooldown_qualified_interval_start_s": [],
+        "cooldown_qualified_interval_count": 0,
+        "online_alert_latency_ms": "not_available"
+      },
+      "checks": {
+        "schema_adapter_valid": true,
+        "expected_decision": true,
+        "expected_raw_status": true,
+        "deterministic_replay": true
+      },
+      "event_count": 4,
+      "validation_errors": []
+    },
+    {
+      "id": "authorization_condition_without_exception",
+      "status": "passed",
+      "expected": {
+        "expected_decision": "confirmed",
+        "expected_raw_status": "true"
+      },
+      "actual": {
+        "raw_status": "true",
+        "decision": "confirmed",
+        "exception_statuses": [
+          "unknown"
+        ],
+        "qualifying_interval_start_s": [],
+        "cooldown_s": 0.0,
+        "cooldown_qualified_interval_start_s": [],
+        "cooldown_qualified_interval_count": 0,
+        "online_alert_latency_ms": "not_available"
+      },
+      "checks": {
+        "schema_adapter_valid": true,
+        "expected_decision": true,
+        "expected_raw_status": true,
+        "deterministic_replay": true
+      },
+      "event_count": 3,
+      "validation_errors": []
+    },
+    {
+      "id": "sequence_order_correct",
+      "status": "passed",
+      "expected": {
+        "expected_decision": "confirmed",
+        "expected_raw_status": "true"
+      },
+      "actual": {
+        "raw_status": "true",
+        "decision": "confirmed",
+        "exception_statuses": [],
+        "qualifying_interval_start_s": [],
+        "cooldown_s": 0.0,
+        "cooldown_qualified_interval_start_s": [],
+        "cooldown_qualified_interval_count": 0,
+        "online_alert_latency_ms": "not_available"
+      },
+      "checks": {
+        "schema_adapter_valid": true,
+        "expected_decision": true,
+        "expected_raw_status": true,
+        "deterministic_replay": true
+      },
+      "event_count": 3,
+      "validation_errors": []
+    },
+    {
+      "id": "sequence_order_reversed",
+      "status": "passed",
+      "expected": {
+        "expected_decision": "not_triggered",
+        "expected_raw_status": "false"
+      },
+      "actual": {
+        "raw_status": "false",
+        "decision": "not_triggered",
+        "exception_statuses": [],
+        "qualifying_interval_start_s": [],
+        "cooldown_s": 0.0,
+        "cooldown_qualified_interval_start_s": [],
+        "cooldown_qualified_interval_count": 0,
+        "online_alert_latency_ms": "not_available"
+      },
+      "checks": {
+        "schema_adapter_valid": true,
+        "expected_decision": true,
+        "expected_raw_status": true,
+        "deterministic_replay": true
+      },
+      "event_count": 3,
+      "validation_errors": []
+    }
+  ],
+  "failure_fixtures": [
+    {
+      "id": "missing_quality_field",
+      "status": "passed",
+      "expected_error": "missing:quality",
+      "actual_errors": [
+        "missing:quality"
+      ]
+    },
+    {
+      "id": "missing_rule_then",
+      "status": "passed",
+      "expected_error": "missing:then",
+      "actual_errors": [
+        "missing:then"
+      ]
+    }
+  ],
+  "limitations": [
+    "Synthetic traces only; no customer/site data.",
+    "The evaluator intentionally implements only operators exercised by these fixtures.",
+    "Configured unknown_policy actions (suppress, delay, escalate_review, treat_as_false) are not executed by this P0 evaluator.",
+    "No perception accuracy, camera capacity or deployment SLO is inferred."
+  ]
+}
