@@ -17,6 +17,10 @@
 - Em dash and en dash scan: passed with zero remaining U+2014 or U+2013 characters in the study folder.
 - External research links: official model and licensing pages were checked during research lookup; the sandbox's direct `curl` path does not provide reliable HTTP results for all external hosts, so URL reachability is not treated as proof of source validity.
 - Deployment benchmarks, camera capacity, power and cost: intentionally not run because target streams, exact checkpoints, target hardware, region and owner thresholds remain open.
+- P0 rule fixtures: passed 11/11 semantic cases and 2/2 expected validation failures with deterministic replay checks.
+- P0 structured replay: passed with 13 input frames, 7 sampled frames, 3 typed events, 1 track and a bounded evidence hash.
+- P0 specialised CV contract path: passed with 13 precomputed detections, 1 track and a 5.0 second dwell against a 3.0 second rule threshold; no learned detector ran.
+- P0 SceneSolver inspection: parsed the committed artifact, recorded 3366 source frames and 44 anomaly records, and did not run inference.
 
 ## Interpretation
 

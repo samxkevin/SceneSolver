@@ -1,0 +1,54 @@
+{
+  "artifact": "P0 specialised CV reference path",
+  "status": "measured_contract_path",
+  "path": [
+    "detector_adapter",
+    "tracker",
+    "trajectory_zone_state",
+    "deterministic_rule"
+  ],
+  "detector": {
+    "implementation": "precomputed synthetic detection adapter",
+    "learned_model_run": false,
+    "accuracy": "not_available"
+  },
+  "stage_wall_time_ms": {
+    "detector_adapter": 0.022,
+    "tracker": 0.003,
+    "trajectory_zone_state": 0.008,
+    "deterministic_rule": 0.001
+  },
+  "total_wall_time_ms": 0.186,
+  "inputs": {
+    "frames": 13,
+    "detections": 13,
+    "camera_id": "cam-p0"
+  },
+  "outputs": {
+    "tracks": 1,
+    "trajectories": [
+      {
+        "track_id": "p1",
+        "zone": "restricted",
+        "start_s": 1.0,
+        "end_s": 6.0,
+        "dwell_s": 5.0
+      }
+    ],
+    "decisions": [
+      {
+        "track_id": "p1",
+        "rule_id": "p0_zone_dwell",
+        "decision": "confirmed",
+        "dwell_s": 5.0,
+        "threshold_s": 3.0
+      }
+    ]
+  },
+  "memory_mb": "not_available; psutil and model runtime were not used",
+  "limitations": [
+    "No pretrained detector or video decoder was available in the execution environment.",
+    "Synthetic bounding boxes and track hints demonstrate the interface only.",
+    "The result establishes architecture path execution, not visual accuracy or production performance."
+  ]
+}

@@ -1,77 +1,79 @@
-# Executive Architecture Summary
+# Submission-Ready Executive Architecture Summary
 
-## Decision under study
+**Study status:** Feasibility study with empirical evaluation protocol; measurements pending where target data/hardware are unavailable.
 
-The leading architecture is a **Hierarchical Event Driven Architecture with Sensor Integration and Optional VLM Escalation**:
+## Recommendation
+
+Use a **Hierarchical Event Driven Architecture with Sensor Integration and Optional VLM Escalation**. The recommended Core CV path is:
 
 ```text
-CCTV / RTSP
-  -> decode, health and bounded ring buffer
-  -> sampled lightweight perception
-  -> detector + tracker + optional pose/OCR/state classifiers
-  -> camera-local observations and quality signals
-  -> temporal state estimator
-  -> deterministic rule engine
-  -> structured evidence package
-  -> local alert / optional controlled synchronisation
-                         \
-                          -> selective VLM or cloud review
+CCTV -> decode and health -> sampled perception -> tracker and trajectory
+     -> typed observations/events -> temporal state -> deterministic owner rules
+     -> bounded evidence -> alert and human review
 ```
 
-The VLM branch consumes a selected evidence package and returns an explicitly non-authoritative narrative or a typed review suggestion. It does not mutate the event ledger or execute policy. A human may review high-impact cases before action.
+Evaluate optional capabilities as parallel branches around Core CV:
 
-## Why not one large model?
+```text
+Core CV
+├── + Temporal
+├── + Anomaly
+├── + VLM review
+└── + Sensor integration
+```
 
-A single VLM can be useful for open-world description, but it does not remove the need for stable identity across frames, camera geometry, timers, permissions, absence conditions, audit logs, deterministic replay and evidence integrity. It also adds cost, latency, privacy exposure and hard-to-calibrate failure modes. It is therefore a poor default for routine “inside zone for more than 30 seconds” or “gate open for more than 20 seconds” decisions.
+Sensor integration may replace a visual predicate, corroborate it or expose a different failure mode. It is not presumed to be an additive final stage. The internal A/B/C/D/E labels remain comparison shorthand, not the architecture name.
 
-## What the smallest system looks like
+Deterministic policy evaluation is authoritative. VLM output is advisory, bounded by evidence and unable to override the event ledger or final rule result. Unknown and degraded states remain explicit.
 
-| Requirement shape | Smallest credible mechanism | Learned component? |
+## Direct answers to the supervisor questions
+
+| Question | Feasibility answer | Evidence status |
 |---|---|---|
-| Person/object present | Small detector, possibly class-specific | Yes, unless sensor/PLC provides it |
-| Enter/leave a polygon | Detector + camera calibration/geometry + tracker | Detector/tracker only |
-| Presence duration | Track state + monotonic timer | No additional model |
-| Gate open/closed | Fixed camera geometry/classifier or contact sensor | Maybe; deterministic if a trusted sensor exists |
-| Access permission | Badge/access-control event or roster lookup | No; identity perception may be separate |
-| “Smoking” | Action/object/pose cue over a window | Usually yes; needs site data |
-| Required sequence completed | Typed events + finite-state/temporal rule | No, once events exist |
-| “Something unusual” | Anomaly model or open-vocabulary/VLM review | Yes; policy must not equate unusual with violation |
-| Explain a completed decision | VLM/LLM constrained to evidence | Optional; not a source of truth |
+| What architecture should be used? | Hierarchical event and rule architecture with a small Core CV path, optional temporal/anomaly/VLM branches and a parallel sensor arm where justified | Architecture is specified; P0 contract replay measured |
+| Which AI capabilities are actually required? | A detector or other observation source, a tracker/trajectory state, and only the temporal/action model needed by a specific rule. Anomaly and VLM are optional candidates. | P0 used precomputed detections; visual model accuracy remains open |
+| What can plausibly run on CPU? | Decode, sampling, health, small sampled detector after measurement, simple tracking, geometry, timers, deterministic rules and bounded evidence | Architectural feasibility; target CPU capacity pending |
+| What needs GPU acceleration? | Training, larger video transformers, dense models and most continuous VLM use. A small exported detector may or may not need GPU depending on target workload | No target-device GPU result produced |
+| Where does quantisation help? | It can reduce model memory and bandwidth and may reduce latency when kernels are supported. It does not prove CPU suitability or preserve event quality automatically | FP32/FP16/INT8 comparison pending |
+| What should stay on edge? | Raw streams, routine perception, tracker/state, deterministic rules, health, ring buffer and routine evidence by default | Privacy architecture; site deployment pending |
+| What can move to cloud? | Approved training, batch analytics and selective redacted evidence review where policy, residency, cost and egress permit | No cloud run; policy boundary specified |
+| How is privacy preserved? | Minimise raw retention, keep raw video and keys local by default, send only approved metadata or redacted evidence, restrict access and audit egress | Design and synthetic metadata evidence path measured; governance approval pending |
+| How are owner-defined rules represented? | Versioned schema-validated expressions over typed events with temporal operators, exceptions, authorization, schedules, cooldowns and human-review actions | Synthetic rule fixtures measured |
+| How are temporal events represented? | Source and monotonic-derived time bounds, transitions, intervals, provenance, quality and explicit unknown/degraded state | P0 replay emitted events and a temporal interval |
+| How is a violation verified? | Reproduce the event trace, evaluate deterministic conditions, confirm health/quality and attach bounded evidence. Human review applies for ambiguous or high-impact policy actions | P0 confirmed a synthetic policy result and evidence hash |
+| What evidence is produced? | Event IDs, rule/version, timestamps, source frame IDs, condition trace, model/config provenance, hashes, privacy classification and reviewer state | P0 produced a bounded metadata manifest; visual evidence quality pending |
+| How are false positives and false negatives handled? | Use rule-level precision/recall, false alerts and misses per camera-hour, unknown rate, hard negatives, calibration, error review and correction/retraction | Metrics and synthetic semantic checks exist; site rates pending |
+| What is already demonstrated? | 11/11 synthetic rule cases, 2/2 malformed-input checks, deterministic replay, model-neutral stage flow, bounded evidence hash, one-track zone dwell path and inspection of an existing SceneSolver artifact | Measured in `experiments/p0/` |
+| What remains to be experimentally validated? | Real detector accuracy, target-camera generalisation, tracking quality, hardware latency/memory/power, quantisation, VLM value, sensor value, cost and camera capacity | Open |
+| What should the first prototype contain? | One camera or replay source, one lightweight perception adapter, one tracker/trajectory path, typed events, deterministic rules, bounded evidence, replay tests and health/degraded handling | P0 demonstrates the contract; customer/site data still required |
 
-## Feasibility by hardware tier
+## P0 evidence boundary
 
-- **CPU-only laptop:** feasible for one/few streams at reduced sampling only after measurement; target detector, decode, tracking, geometry, timers and rules first. Heavy video transformers, generative VLMs and dense segmentation are offline/selective candidates.
-- **Integrated GPU/NPU laptop:** same architecture with accelerated small detector/pose/OCR where the runtime supports the exact operators. NPU support and throughput must be measured on the actual device; TOPS is not FPS.
-- **Consumer GPU workstation:** practical development and multi-camera evaluation platform; can host temporal models and a selective VLM, subject to VRAM and concurrency.
-- **Dedicated edge GPU:** preferred for on-prem multi-camera service when CPU-only capacity is insufficient; local video remains local.
-- **Cloud GPU:** useful for fleet analytics, training, difficult review and cross-camera searches where policy permits. It is not a reason to transmit continuous raw video by default.
+The P0 pass is intentionally small. It does not retrain SceneSolver, implement a production detector, build a dashboard, create multi-camera infrastructure, deploy to cloud or add VLM infrastructure.
+
+Measured P0 artifacts:
+
+- rule semantics over synthetic traces;
+- model-neutral structured replay from sampling through evidence;
+- a specialised CV contract path using precomputed detections;
+- inspection of the existing SceneSolver report artifact and its reproducibility blockers.
+
+The P0 results support **feasible architecture**, not **proven deployment performance**. Existing SceneSolver accuracy figures remain repository evidence with their support, split and task limitations. Quantisation and VLM review remain pending because an exact model/runtime/hardware or readily available lightweight model was not present.
 
 ## SceneSolver disposition
 
-`SceneSolver = established research/reference baseline + reusable components`, not a ready-made compliance engine. Keep its deterministic DatasetTools, staged orchestration ideas, evidence/reporting concepts and candidate temporal models as comparison points. Do not extend the production/research pipeline until the isolated prototype proves a contract and measurements.
+SceneSolver remains a reference baseline and candidate component library. Its committed report artifact records 3366 frames at 30 FPS, 320x240 resolution and 112.2 seconds, with 44 anomaly records. P0 measured artifact parsing, but did not claim inference runtime, stage timing, memory, target hardware capacity or owner-rule accuracy. The source video and complete inference prerequisites are not available in this checkout.
 
-The repository evidence is meaningful but narrow: a binary TimeSformer test report on 30 samples, a seven-class report on 140 samples, anomaly/keyframe artifacts, audio autoencoder history, and a sample report. Missing are target-site labelled streams, leakage-controlled splits, calibration, MOT/tracking metrics, end-to-end latency, concurrency, power, and rule evaluation.
+## First prototype boundary
 
-## Acceptance gates before a production choice
+The first real-data prototype should be an offline replay or one-camera edge experiment:
 
-1. A labelled site-specific test set exists with camera/time split and a written event ontology.
-2. Detector/tracker outputs meet per-rule observation recall under occlusion and night conditions.
-3. Rule replay is deterministic and unit-tested, including negative/absence cases and exceptions.
-4. Alert quality is measured per camera-hour, not only aggregate accuracy.
-5. The edge service survives camera/network/model failures and records health state.
-6. Quantised exports are compared to a floating baseline on the same clips and target hardware.
-7. Evidence is sufficient for a reviewer while retention and cloud transfer remain policy-approved.
-8. A human-review path exists for ambiguous or high-impact cases.
-9. Each retained stage has measured incremental value, resource cost, privacy review, licensing clearance and reliability approval.
-10. Total cost includes amortisation, power, storage, bandwidth, cloud GPU, egress, maintenance and cameras per device.
-11. Unknown and degraded states are explicit and cannot silently satisfy a rule.
+1. use an approved site-like clip or structured observation source;
+2. run one small detector or observation adapter and one simple tracker;
+3. emit typed observations and temporal intervals;
+4. evaluate two or three owner-approved rules deterministically;
+5. capture bounded evidence and health/degraded state;
+6. measure rule quality, latency, memory, storage and failure cases;
+7. evaluate temporal, anomaly, VLM and sensor branches independently only when a rule justifies them.
 
-## Claims not yet established
-
-- Exact cameras-per-device capacity.
-- CPU/NPU/edge-GPU FPS or power.
-- Generalisation of any UCF-Crime result to owner-defined compliance.
-- Accuracy of smoking, authorization, “required action not completed,” or cross-camera identity.
-- Whether audio is necessary, permitted, or useful for a particular deployment.
-
-These are tracked in [`../decisions/open-questions.md`](../decisions/open-questions.md) and must not be replaced with assumptions.
+This is a feasibility measurement package, not a production service. No camera count, FPS, cost, legal-compliance result or deployment SLO is claimed without target data and hardware.

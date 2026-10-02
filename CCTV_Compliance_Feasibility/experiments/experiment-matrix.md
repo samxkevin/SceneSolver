@@ -48,9 +48,9 @@ Run four arms on the same frozen replay manifest and rule definitions:
 
 The harness records unavailable fields as `not_available`, not zero. It keeps cold/warm startup separate and never silently substitutes a different SceneSolver checkpoint or data path. Full protocol: [`../baseline/empirical-comparison-plan.md`](../baseline/empirical-comparison-plan.md).
 
-## E-18: Ablation retention ladder
+## E-18: Parallel branch retention comparison
 
-Add components in order: detector/tracker/rules, temporal model, anomaly candidate generation, VLM review, sensor integration. For each addition measure incremental rule recall, false alerts, misses, unknown rate, latency, RAM/VRAM, frames processed, power, privacy exposure, storage, cloud/egress cost, licensing and failure recovery. Retain only after measurement, incremental-value, resource, privacy and reliability gates pass. Full protocol: [`ablation-ladder.md`](ablation-ladder.md).
+Use Core CV as the reference and evaluate four branches separately: `+ Temporal`, `+ Anomaly`, `+ VLM review` and `+ Sensor integration`. For each branch measure incremental rule recall, false alerts, misses, unknown rate, latency, RAM/VRAM, frames processed, power, privacy exposure, storage, cloud/egress cost, licensing and failure recovery. Retain a branch only after measurement, incremental-value, resource, privacy and reliability gates pass. Sensor integration is optional and is not assumed to be the final additive stage. Full protocol: [`ablation-ladder.md`](ablation-ladder.md).
 
 ## Latency decomposition
 

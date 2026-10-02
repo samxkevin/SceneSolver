@@ -53,3 +53,17 @@ Append entries; do not erase prior assumptions. Dates are UTC.
 - **New evidence:** Added stages also add latency, memory, privacy exposure, failure modes, license obligations and operating cost.
 - **New conclusion:** Use the ablation ladder and retain a component only after measurement, incremental value, resource cost, privacy review and reliability approval.
 - **Uncertainty:** The incremental value of each stage is unmeasured until the locked replay experiment runs.
+
+## D-008 - 2026-10-02 - Treat sensor integration as a parallel arm
+
+- **Previous assumption:** Sensor integration could be described as the final additive stage after temporal, anomaly and VLM components.
+- **New evidence:** A sensor can replace a visual predicate, corroborate it or fail independently. Forcing it into a linear ladder would overstate the target architecture.
+- **New conclusion:** Evaluate sensor integration as a parallel branch against Core CV, only where a trusted sensor is available and approved.
+- **Uncertainty:** Sensor freshness, join quality, availability, privacy and operational value remain site-specific.
+
+## D-009 - 2026-10-02 - P0 evidence is intentionally bounded
+
+- **Previous assumption:** Feasibility evidence might require implementing the full perception and deployment stack.
+- **New evidence:** The rule contract, replay seam and existing SceneSolver artifacts can demonstrate important feasibility claims without customer video, target hardware or external model downloads.
+- **New conclusion:** Submit the measured synthetic rule pass, model-neutral replay, specialised CV contract path and repository artifact inspection as P0 evidence. Keep visual accuracy, quantisation, VLM and deployment capacity explicitly pending.
+- **Uncertainty:** Site-like replay and one target hardware profile are still required for performance claims.

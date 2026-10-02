@@ -1,7 +1,7 @@
 # CCTV AI Compliance System - Feasibility Report
 
 **Date:** 2026-10-02 (Asia/Calcutta)
-**Status:** empirical feasibility baseline and architecture study; model and hardware selection remains conditional on measurements
+**Status:** Feasibility study with empirical evaluation protocol; measurements pending where target data/hardware are unavailable.
 **Primary requirement source:** the mission/context document supplied for this study
 **Repository baseline:** SceneSolver at the parent directory
 
@@ -9,16 +9,39 @@
 
 ## 1. Executive Summary
 
-The proposed architecture is a **Hierarchical Event Driven Architecture with Sensor Integration and Optional VLM Escalation**. The core path is:
+The proposed architecture is a **Hierarchical Event Driven Architecture with Sensor Integration and Optional VLM Escalation**. The Core CV path is:
 
 ```text
-CCTV or sensor -> decode and health -> sampled perception -> tracking and state
-             -> typed event stream -> deterministic owner-policy rules
-             -> bounded evidence -> alert and human review
-             \-> optional policy-approved VLM review
+CCTV -> decode and health -> sampled perception -> tracking and state
+     -> typed event stream -> deterministic owner-policy rules
+     -> bounded evidence -> alert and human review
 ```
 
-SceneSolver remains a reference baseline. The study now includes a same-input comparison protocol for four arms: SceneSolver, specialised CV, the hierarchical core, and the hierarchical core plus optional VLM. It also includes an ablation ladder from detector/tracker/rules through temporal model, anomaly candidate generation, VLM review and sensor integration. No camera capacity, deployment FPS, accuracy threshold, cost or production suitability number is fabricated. Requirement mapping from the supplied mission/context document is in [`requirements-traceability.md`](requirements-traceability.md).
+Experimental branches are evaluated in parallel rather than assumed to be additive:
+
+```text
+Core CV
+├── + Temporal
+├── + Anomaly
+├── + VLM review
+└── + Sensor integration
+```
+
+Sensor integration may substitute for a visual predicate or provide a parallel corroborating signal. It is not presumed to be the final additive stage.
+
+SceneSolver remains a reference baseline. The study now includes a same-input comparison protocol for four arms: SceneSolver, specialised CV, the hierarchical core, and the hierarchical core plus optional VLM. The focused P0 pass provides measured synthetic rule evaluation, a model-neutral replay contract, a specialised CV contract path and repository artifact inspection. No camera capacity, deployment FPS, accuracy threshold, cost or production suitability number is fabricated. Requirement mapping from the supplied mission/context document is in [`requirements-traceability.md`](requirements-traceability.md).
+
+### 1.1 Evidence status at submission
+
+| Evidence | Status | What it establishes | Limitation |
+|---|---|---|---|
+| Rule engine replay | measured | deterministic policy semantics for true, false, unknown, cooldown, exception and sequence cases | synthetic traces only |
+| SceneSolver baseline | measured/repository | existing capability, output artifact and reproducibility limitations | target-site deployment not established |
+| Specialised CV path | measured contract path | perception output can feed tracking, trajectory, zone duration and rules | no production detector accuracy |
+| Quantisation | pending | no new precision tradeoff result | exact model, runtime and hardware unavailable |
+| VLM review | pending | bounded advisory architecture remains defined | no readily available lightweight model was tested |
+
+The complete P0 package is [`experiments/p0-summary.md`](experiments/p0-summary.md), with machine-readable results under [`experiments/p0/`](experiments/p0/).
 
 ## 2. Problem Definition
 
@@ -49,10 +72,12 @@ Privacy minimisation, edge-first operation, resilience to camera/network/storage
 
 ```text
 CCTV -> decode/health -> sampled lightweight perception
-     -> detector -> tracker -> optional pose/OCR/action/sensor join
+     -> detector -> tracker -> optional pose/OCR/action
      -> typed observations -> temporal state/intervals
      -> deterministic rule engine -> evidence manifest -> local alert/review
                                                      \-> policy gateway -> optional cloud/VLM
+
+Approved sensor adapters -> typed sensor events ----------------------^
 ```
 
 The separation and interfaces are specified in [`architecture/prototype-and-production.md`](architecture/prototype-and-production.md), [`temporal_reasoning/design.md`](temporal_reasoning/design.md) and [`rule_engine/design.md`](rule_engine/design.md). The descriptive name is intentionally not an A/B/C/D/E label. Those labels remain internal comparison shorthand in [`architecture/candidate-architectures.md`](architecture/candidate-architectures.md).
@@ -61,7 +86,7 @@ The separation and interfaces are specified in [`architecture/prototype-and-prod
 
 A single VLM is broad but hard to calibrate, expensive and weak at exact temporal/policy semantics. A specialised pipeline is efficient and auditable for known predicates but cannot solve open-world semantics. A hierarchical pipeline combines the two under a compute/privacy budget. A sensor-assisted architecture is superior wherever a gate contact, access-control, POS, PLC or schedule event can provide the state more reliably than vision. The comparative decision is in [`architecture/candidate-architectures.md`](architecture/candidate-architectures.md).
 
-The recommendation preserves the hierarchical and hybrid design: deterministic policy evaluation is authoritative, VLM use is optional and advisory, and sensor integration is preferred when it provides a more direct state or authorization signal.
+The recommendation preserves the hierarchical and hybrid design: deterministic policy evaluation is authoritative and VLM use is optional and advisory. Temporal, anomaly, VLM and sensor integration are parallel experimental arms around Core CV. Sensor integration is preferred for a rule only when it provides a more direct state or authorization signal; it is not assumed to be an additive final stage.
 
 ## 7. AI/CV Pipeline
 
@@ -170,7 +195,7 @@ SceneSolver metrics require caveats about support, split lineage, possible leaka
 
 Use synthetic event traces for rule semantics, controlled staged scenes for repeatability and naturalistic time-separated/site-separated holdout for deployment validity. Tune thresholds on calibration data, lock test data, stratify by condition, inspect worst cases and retain raw predictions/config hashes.
 
-The reproducible four-arm comparison uses identical replay inputs, annotations, rule definitions, ROI geometry, hardware profile and output contract. The required protocol and measurement ledger are in [`baseline/empirical-comparison-plan.md`](baseline/empirical-comparison-plan.md).
+The reproducible four-arm comparison uses identical replay inputs, annotations, rule definitions, ROI geometry, hardware profile and output contract. The required protocol and measurement ledger are in [`baseline/empirical-comparison-plan.md`](baseline/empirical-comparison-plan.md). The focused P0 results are in [`experiments/p0-summary.md`](experiments/p0-summary.md).
 
 ## 25. Metrics
 
@@ -180,7 +205,7 @@ System measurements include total runtime, stage latency, RAM, VRAM, frames deco
 
 ## 26. Prototype Architecture
 
-P0 is offline local replay with fake adapters and deterministic rules. P1 is one live edge camera with a small detector/tracker, zones, timers, local evidence and health. P2 adds multi-camera event bus, durable ledger, sensor joins and policy-controlled export. Do not add a VLM to the critical path before the core is measurable.
+The feasibility P0 is offline local replay with synthetic adapters and deterministic rules. It now measures rule semantics, a model-neutral event/evidence contract and a specialised CV contract path without pretending to be visual accuracy. A later prototype can be one edge camera with a small detector/tracker, zones, timers, local evidence and health. Sensor integration should be tested as a parallel arm where a trusted sensor exists. Do not add a VLM to the critical path before the core is measurable. Multi-camera infrastructure and durable production services are outside this submission pass.
 
 ## 27. Minimum Viable Prototype
 
@@ -194,17 +219,17 @@ Component retention follows measurement, incremental value, resource cost, priva
 
 ## 29. Recommended Experiment Matrix
 
-E-01 to E-16 cover detector/tracker/action/temporal/rule quality, CPU/iGPU/edge/cloud latency, quantisation, power/memory, end-to-end alert latency, evidence, robustness and drift. The four-arm baseline plan adds stage timing, report time, resource samples, outputs and failure cases. The ablation ladder adds components in this order:
+E-01 to E-16 cover detector/tracker/action/temporal/rule quality, CPU/iGPU/edge/cloud latency, quantisation, power/memory, end-to-end alert latency, evidence, robustness and drift. The four-arm baseline plan adds stage timing, report time, resource samples, outputs and failure cases. The focused P0 evidence package is a small subset of this roadmap. The experimental branches are:
 
 ```text
-Detector + Tracker + Rules
- -> Temporal Model
- -> Anomaly Candidate Generation
- -> VLM Review
- -> Sensor Integration
+Core CV
+├── + Temporal
+├── + Anomaly
+├── + VLM review
+└── + Sensor integration
 ```
 
-Every retained stage must show incremental value, resource cost, privacy review and reliability approval. No acceptance number is fabricated; owners fill the blank gates in [`experiments/benchmark-config.example.yaml`](experiments/benchmark-config.example.yaml).
+Every branch must show incremental value, resource cost, privacy review and reliability approval. Sensor integration is not presumed to be retained after another branch. No acceptance number is fabricated; owners fill the blank gates in [`experiments/benchmark-config.example.yaml`](experiments/benchmark-config.example.yaml).
 
 ## 30. Open Technical Questions
 
@@ -223,4 +248,6 @@ The largest blockers are the first rule ontology, trusted sensor/access-control 
 9. Keep continuous raw CCTV and routine policy evaluation at the edge where privacy requires; export only controlled, minimised data.
 10. Include amortisation, power, storage, cloud GPU, bandwidth, egress, maintenance, cameras per device and cost per camera-hour or month in the decision.
 11. Do not claim CPU, NPU, GPU or cloud capacity until the complete pipeline and target conditions are measured.
-12. The next engineering action is P0: implement model-neutral event/rule/evidence contracts, freeze replay inputs, and run the controlled comparison and ablation protocol before choosing a final model.
+12. The P0 evidence pass demonstrates deterministic rule semantics and model-neutral contract flow, but not visual accuracy or deployment capacity.
+13. The first prototype should contain one lightweight perception adapter, one tracker/trajectory path, typed events, deterministic rules, bounded evidence and replay tests. It should not contain a dashboard, production multi-camera service or mandatory VLM.
+14. The next evidence action is to replace synthetic inputs with approved site-like replay data and one exact target hardware profile, then measure the branches separately before choosing retained components.

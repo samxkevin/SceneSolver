@@ -1,0 +1,164 @@
+{
+  "artifact": "P0 model-neutral replay harness",
+  "status": "measured_contract_replay",
+  "input_type": "structured_frame_replay",
+  "video_decode": "not_available; structured frames substituted",
+  "pipeline": [
+    "decode",
+    "sampling",
+    "observation",
+    "event",
+    "temporal_state",
+    "rule",
+    "evidence"
+  ],
+  "stage_wall_time_ms": {
+    "decode": 0.0,
+    "sampling": 0.001,
+    "observation": 0.017,
+    "event": 0.039,
+    "temporal_state": 0.001,
+    "rule": 0.044,
+    "evidence": 0.045
+  },
+  "total_wall_time_ms": 0.232,
+  "stream": {
+    "camera_id": "cam-p0",
+    "source_fps": 4,
+    "frames_decoded": 13,
+    "frames_processed": 7,
+    "frames_skipped": 6,
+    "frames_dropped": 0
+  },
+  "outputs": {
+    "observations": 7,
+    "events": 3,
+    "event_trace": [
+      {
+        "event_id": "r-entry-p1",
+        "event_type": "person.entered_zone",
+        "camera_id": "cam-p0",
+        "time": {
+          "start": "2026-01-01T00:00:01Z",
+          "end": "2026-01-01T00:00:01Z",
+          "clock_domain": "monotonic-derived",
+          "complete": true
+        },
+        "attributes": {
+          "zone": "restricted",
+          "subject": "p1"
+        },
+        "quality": {
+          "status": "observed",
+          "track_quality": 1.0
+        },
+        "provenance": {
+          "source_type": "tracker",
+          "source_id": "p0-replay",
+          "model_version": null
+        },
+        "privacy": {
+          "classification": "metadata",
+          "egress_allowed": false
+        }
+      },
+      {
+        "event_id": "r-inside-p1",
+        "event_type": "person.inside_zone",
+        "camera_id": "cam-p0",
+        "time": {
+          "start": "2026-01-01T00:00:01Z",
+          "end": "2026-01-01T00:00:06Z",
+          "clock_domain": "monotonic-derived",
+          "complete": true
+        },
+        "attributes": {
+          "zone": "restricted",
+          "subject": "p1"
+        },
+        "quality": {
+          "status": "observed",
+          "track_quality": 1.0
+        },
+        "provenance": {
+          "source_type": "tracker",
+          "source_id": "p0-replay",
+          "model_version": null
+        },
+        "privacy": {
+          "classification": "metadata",
+          "egress_allowed": false
+        }
+      },
+      {
+        "event_id": "r-health",
+        "event_type": "camera.health",
+        "camera_id": "cam-p0",
+        "time": {
+          "start": "2026-01-01T00:00:00Z",
+          "end": "2026-01-01T00:00:06Z",
+          "clock_domain": "monotonic-derived",
+          "complete": true
+        },
+        "attributes": {
+          "status": "healthy"
+        },
+        "quality": {
+          "status": "observed",
+          "track_quality": 1.0
+        },
+        "provenance": {
+          "source_type": "sensor",
+          "source_id": "p0-replay",
+          "model_version": null
+        },
+        "privacy": {
+          "classification": "metadata",
+          "egress_allowed": false
+        }
+      }
+    ],
+    "temporal_tracks": 1,
+    "rule_decision": {
+      "raw_status": "true",
+      "decision": "confirmed",
+      "exception_statuses": [],
+      "candidate_times_s": [
+        1.0
+      ],
+      "cooldown_s": 30.0,
+      "emitted_alert_times_s": [
+        1.0
+      ],
+      "alert_count": 1
+    },
+    "evidence": {
+      "manifest": {
+        "camera_id": "cam-p0",
+        "rule_id": "p0_zone_dwell",
+        "event_ids": [
+          "r-entry-p1",
+          "r-inside-p1"
+        ],
+        "source_frame_ids": [
+          0,
+          2,
+          4,
+          6,
+          8,
+          10,
+          12
+        ],
+        "privacy": "metadata_only"
+      },
+      "sha256": "5c6d27105e68818df3190d206d3574d115ef60fd7e108f04c05f7a6837950c60",
+      "bounded": true
+    }
+  },
+  "schema_errors": [],
+  "limitations": [
+    "No video decoder or visual detector was run; input detections are synthetic precomputed observations.",
+    "The tracker is a single-track adapter using track_hint, not a MOT evaluation.",
+    "Runtime values measure this Python contract replay only and are not deployment throughput."
+  ]
+}

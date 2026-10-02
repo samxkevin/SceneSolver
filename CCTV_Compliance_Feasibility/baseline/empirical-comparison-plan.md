@@ -2,14 +2,15 @@
 
 ## Purpose
 
-This plan turns SceneSolver from a repository inventory into a reproducible comparison arm. It does not modify the existing SceneSolver pipeline. The comparison uses one common replay harness, one locked input manifest, one normalized output contract, and one evaluation protocol for four systems:
+This plan turns SceneSolver from a repository inventory into a reproducible comparison arm. It does not modify the existing SceneSolver pipeline. The comparison uses one common replay harness, one locked input manifest, one normalized output contract, and one evaluation protocol for four primary systems plus an optional parallel sensor arm:
 
 1. **S0: SceneSolver reference pipeline**
 2. **S1: Specialised CV baseline**
-3. **S2: Hierarchical Event Driven Architecture with Sensor Integration and Optional VLM Escalation, core path only**
+3. **S2: Hierarchical Event Driven Architecture core path**
 4. **S3: S2 plus optional VLM escalation**
+5. **S4: S2 plus sensor integration, evaluated as a parallel arm where a trusted sensor exists**
 
-The point is not to make every system identical. The point is to measure the cost and incremental value of the architecture choices under the same input clips, event labels, rule definitions and reporting requirements.
+The point is not to make every system identical. The point is to measure the cost and incremental value of the architecture choices under the same input clips, event labels, rule definitions and reporting requirements. S4 is a parallel comparison arm, not an instruction to add sensors to every deployment or to place it after the VLM arm.
 
 ## Common replay corpus
 
@@ -88,6 +89,17 @@ S2
 ```
 
 VLM invocation is triggered by candidate uncertainty or a review policy. The VLM cannot create an authoritative violation or override a deterministic rule result. Measure both `S3-triggered` and `S3-always-on` only as an explicit cost control, not as a recommended deployment.
+
+### S4: Hierarchical core plus sensor integration
+
+```text
+S2
++ one approved sensor or authorization signal
++ explicit freshness, join quality and failure state
++ deterministic comparison against the equivalent visual predicate
+```
+
+Run S4 only when a trusted sensor is available. It may replace a visual predicate, corroborate it, or expose a different failure mode. Do not interpret S4 as a mandatory additive stage.
 
 ## Fairness and reproducibility controls
 

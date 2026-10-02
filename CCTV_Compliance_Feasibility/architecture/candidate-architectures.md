@@ -78,7 +78,7 @@ This is a fundamentally important alternative. A gate contact sensor may be more
 
 ## Decision
 
-The descriptive target is **Hierarchical Event Driven Architecture with Sensor Integration and Optional VLM Escalation**. Internally, this maps to C as the hierarchical core, E where trusted sensors are available, and D as optional controlled escalation. Use B as the specialised CV correctness baseline and A as a research comparison only. Benchmark all four operational arms through [`../baseline/empirical-comparison-plan.md`](../baseline/empirical-comparison-plan.md).
+The descriptive target is **Hierarchical Event Driven Architecture with Sensor Integration and Optional VLM Escalation**. Internally, this maps to C as the hierarchical core, D as optional controlled escalation, and E as a parallel sensor-integration arm where trusted sensors are available. E is not presumed to be an additive final stage. Use B as the specialised CV correctness baseline and A as a research comparison only. Benchmark the primary four operational arms through [`../baseline/empirical-comparison-plan.md`](../baseline/empirical-comparison-plan.md), with sensor integration evaluated separately when applicable.
 
 ## Rejected shortcuts
 

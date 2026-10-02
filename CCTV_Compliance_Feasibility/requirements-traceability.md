@@ -38,7 +38,8 @@ This matrix traces the major requirements in the supplied original context docum
 | T-32 | `COST AND DEPLOYMENT IMPLICATIONS` | Compare total cost, hardware amortisation, power, storage, bandwidth, cloud and maintenance | GPU/Edge Feasibility, Cloud Feasibility | `hardware/feasibility-matrix.md` | covered as measurement framework, actual prices open |
 | T-33 | `CURRENT MODEL LANDSCAPE` | Consider YOLO26/YOLOE-26 and Qwen3-VL/SmolVLM2 as candidates without assuming they win | Model Families, Final Conclusions | `models/2026-landscape.md`, `models/licensing-matrix.md` | covered by refinement |
 | T-34 | `LICENSING` | Treat code/weights license, commercial restrictions, attribution, redistribution and deployment compatibility as selection gates | Detailed Model Comparison, Final Conclusions | `models/licensing-matrix.md`, `architecture/model-selection-gates.md` | covered by refinement |
-| T-35 | `ABLATION AND INCREMENTAL VALUE` | Measure Detector+Tracker+Rules, then temporal, anomaly, VLM and sensor additions | Recommended Experiment Matrix | `experiments/ablation-ladder.md` | covered by refinement |
+| T-35 | `ABLATION AND INCREMENTAL VALUE` | Measure Core CV against parallel temporal, anomaly, VLM and sensor branches | Recommended Experiment Matrix | `experiments/ablation-ladder.md` | covered by refinement |
+| T-36 | `SUBMISSION EVIDENCE PASS` | Produce actual bounded evidence, separate measured results from repository evidence and leave unavailable deployment measurements open | Executive Summary, Metrics, Final Conclusions | `experiments/p0-summary.md`, `experiments/p0/`, `decisions/validation-log.md` | measured in P0 |
 
 ## Traceability interpretation
 

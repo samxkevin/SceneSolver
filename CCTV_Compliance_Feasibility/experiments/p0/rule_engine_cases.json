@@ -1,0 +1,755 @@
+{
+  "format": "P0 compact synthetic fixtures adapted to temporal_reasoning/event.schema.json",
+  "base_time": "2026-01-01T00:00:00Z",
+  "cases": [
+    {
+      "id": "zone_entry_dwell_confirmed",
+      "expected_decision": "confirmed",
+      "expected_raw_status": "true",
+      "rule": {
+        "id": "restricted_zone_dwell",
+        "version": 1,
+        "unknown_policy": "delay",
+        "when": {
+          "temporal": {
+            "operator": "for_at_least",
+            "subject": {
+              "event": "person.inside_zone",
+              "args": {
+                "zone": "restricted",
+                "subject": "p1"
+              }
+            },
+            "duration": "10s",
+            "max_gap": "2s"
+          }
+        },
+        "then": {
+          "event_type": "compliance.violation",
+          "action": [
+            "human_review"
+          ],
+          "cooldown": "30s"
+        }
+      },
+      "events": [
+        {
+          "event_id": "z1",
+          "event_type": "person.entered_zone",
+          "start_s": 0,
+          "end_s": 0,
+          "attributes": {
+            "zone": "restricted",
+            "subject": "p1"
+          }
+        },
+        {
+          "event_id": "z2",
+          "event_type": "person.inside_zone",
+          "start_s": 0,
+          "end_s": 12,
+          "attributes": {
+            "zone": "restricted",
+            "subject": "p1"
+          }
+        },
+        {
+          "event_id": "h1",
+          "event_type": "camera.health",
+          "start_s": 0,
+          "end_s": 12,
+          "attributes": {
+            "status": "healthy"
+          }
+        }
+      ]
+    },
+    {
+      "id": "gate_open_duration_not_triggered",
+      "expected_decision": "not_triggered",
+      "expected_raw_status": "false",
+      "rule": {
+        "id": "gate_left_open",
+        "version": 1,
+        "when": {
+          "temporal": {
+            "operator": "for_at_least",
+            "subject": {
+              "event": "gate.open",
+              "args": {
+                "gate": "gate_a"
+              }
+            },
+            "duration": "20s",
+            "max_gap": "1s"
+          }
+        },
+        "then": {
+          "event_type": "gate.open_too_long",
+          "action": [
+            "local_alert"
+          ]
+        }
+      },
+      "events": [
+        {
+          "event_id": "g1",
+          "event_type": "gate.open",
+          "start_s": 0,
+          "end_s": 12,
+          "attributes": {
+            "gate": "gate_a"
+          }
+        },
+        {
+          "event_id": "h1",
+          "event_type": "camera.health",
+          "start_s": 0,
+          "end_s": 12,
+          "attributes": {
+            "status": "healthy"
+          }
+        }
+      ]
+    },
+    {
+      "id": "required_action_completed_before_deadline",
+      "expected_decision": "not_triggered",
+      "expected_raw_status": "false",
+      "rule": {
+        "id": "closeout_not_completed",
+        "version": 1,
+        "when": {
+          "all": [
+            {
+              "sequence": [
+                {
+                  "event": "task.started",
+                  "args": {
+                    "task_id": "t1"
+                  }
+                },
+                {
+                  "event": "task.deadline_reached",
+                  "args": {
+                    "task_id": "t1"
+                  }
+                }
+              ],
+              "within": "20s"
+            },
+            {
+              "absence": {
+                "event": {
+                  "event": "task.completed",
+                  "args": {
+                    "task_id": "t1"
+                  }
+                },
+                "window": {
+                  "start_s": 0,
+                  "end_s": 10
+                },
+                "require_healthy_observation": true
+              }
+            }
+          ]
+        },
+        "then": {
+          "event_type": "task.incomplete",
+          "action": [
+            "human_review"
+          ]
+        }
+      },
+      "events": [
+        {
+          "event_id": "t1",
+          "event_type": "task.started",
+          "start_s": 0,
+          "end_s": 0,
+          "attributes": {
+            "task_id": "t1"
+          }
+        },
+        {
+          "event_id": "t2",
+          "event_type": "task.completed",
+          "start_s": 8,
+          "end_s": 8,
+          "attributes": {
+            "task_id": "t1"
+          }
+        },
+        {
+          "event_id": "t3",
+          "event_type": "task.deadline_reached",
+          "start_s": 10,
+          "end_s": 10,
+          "attributes": {
+            "task_id": "t1"
+          }
+        },
+        {
+          "event_id": "h1",
+          "event_type": "camera.health",
+          "start_s": 0,
+          "end_s": 12,
+          "attributes": {
+            "status": "healthy"
+          }
+        }
+      ]
+    },
+    {
+      "id": "required_action_absent_before_deadline",
+      "expected_decision": "confirmed",
+      "expected_raw_status": "true",
+      "rule": {
+        "id": "closeout_not_completed",
+        "version": 1,
+        "when": {
+          "all": [
+            {
+              "sequence": [
+                {
+                  "event": "task.started",
+                  "args": {
+                    "task_id": "t2"
+                  }
+                },
+                {
+                  "event": "task.deadline_reached",
+                  "args": {
+                    "task_id": "t2"
+                  }
+                }
+              ],
+              "within": "20s"
+            },
+            {
+              "absence": {
+                "event": {
+                  "event": "task.completed",
+                  "args": {
+                    "task_id": "t2"
+                  }
+                },
+                "window": {
+                  "start_s": 0,
+                  "end_s": 10
+                },
+                "require_healthy_observation": true
+              }
+            }
+          ]
+        },
+        "then": {
+          "event_type": "task.incomplete",
+          "action": [
+            "human_review"
+          ]
+        }
+      },
+      "events": [
+        {
+          "event_id": "t1",
+          "event_type": "task.started",
+          "start_s": 0,
+          "end_s": 0,
+          "attributes": {
+            "task_id": "t2"
+          }
+        },
+        {
+          "event_id": "t2",
+          "event_type": "task.deadline_reached",
+          "start_s": 10,
+          "end_s": 10,
+          "attributes": {
+            "task_id": "t2"
+          }
+        },
+        {
+          "event_id": "h1",
+          "event_type": "camera.health",
+          "start_s": 0,
+          "end_s": 12,
+          "attributes": {
+            "status": "healthy"
+          }
+        }
+      ]
+    },
+    {
+      "id": "absence_rule_healthy_window",
+      "expected_decision": "confirmed",
+      "expected_raw_status": "true",
+      "rule": {
+        "id": "inspection_missing",
+        "version": 1,
+        "when": {
+          "absence": {
+            "event": {
+              "event": "inspection.completed",
+              "args": {
+                "zone": "dock"
+              }
+            },
+            "window": {
+              "start_s": 0,
+              "end_s": 20
+            },
+            "require_healthy_observation": true
+          }
+        },
+        "then": {
+          "event_type": "inspection.missing",
+          "action": [
+            "human_review"
+          ]
+        }
+      },
+      "events": [
+        {
+          "event_id": "h1",
+          "event_type": "camera.health",
+          "start_s": 0,
+          "end_s": 20,
+          "attributes": {
+            "status": "healthy"
+          }
+        }
+      ]
+    },
+    {
+      "id": "unknown_camera_data_gap",
+      "expected_decision": "unknown",
+      "expected_raw_status": "unknown",
+      "rule": {
+        "id": "inspection_missing",
+        "version": 1,
+        "unknown_policy": "delay",
+        "when": {
+          "absence": {
+            "event": {
+              "event": "inspection.completed",
+              "args": {
+                "zone": "dock"
+              }
+            },
+            "window": {
+              "start_s": 0,
+              "end_s": 20
+            },
+            "require_healthy_observation": true
+          }
+        },
+        "then": {
+          "event_type": "inspection.missing",
+          "action": [
+            "human_review"
+          ]
+        }
+      },
+      "events": [
+        {
+          "event_id": "h1",
+          "event_type": "camera.health",
+          "start_s": 0,
+          "end_s": 8,
+          "attributes": {
+            "status": "healthy"
+          }
+        },
+        {
+          "event_id": "h2",
+          "event_type": "camera.health",
+          "start_s": 8,
+          "end_s": 20,
+          "attributes": {
+            "status": "degraded"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cooldown_and_debounce",
+      "expected_decision": "confirmed",
+      "expected_raw_status": "true",
+      "expected_alert_count": 1,
+      "rule": {
+        "id": "door_open_debounced",
+        "version": 1,
+        "when": {
+          "temporal": {
+            "operator": "for_at_least",
+            "subject": {
+              "event": "door.open",
+              "args": {
+                "door": "d1"
+              }
+            },
+            "duration": "2s",
+            "max_gap": "0s"
+          }
+        },
+        "then": {
+          "event_type": "door.open_too_long",
+          "action": [
+            "local_alert"
+          ],
+          "cooldown": "10s"
+        }
+      },
+      "events": [
+        {
+          "event_id": "d1",
+          "event_type": "door.open",
+          "start_s": 0,
+          "end_s": 1,
+          "attributes": {
+            "door": "d1"
+          }
+        },
+        {
+          "event_id": "d2",
+          "event_type": "door.open",
+          "start_s": 3,
+          "end_s": 6,
+          "attributes": {
+            "door": "d1"
+          }
+        },
+        {
+          "event_id": "d3",
+          "event_type": "door.open",
+          "start_s": 8,
+          "end_s": 11,
+          "attributes": {
+            "door": "d1"
+          }
+        },
+        {
+          "event_id": "h1",
+          "event_type": "camera.health",
+          "start_s": 0,
+          "end_s": 15,
+          "attributes": {
+            "status": "healthy"
+          }
+        }
+      ]
+    },
+    {
+      "id": "exception_authorization_suppresses",
+      "expected_decision": "suppressed_by_exception",
+      "expected_raw_status": "true",
+      "rule": {
+        "id": "restricted_zone_authorization",
+        "version": 1,
+        "exceptions": [
+          {
+            "predicate": "exception.active",
+            "args": {
+              "rule_id": "restricted_zone",
+              "equals": true
+            }
+          }
+        ],
+        "when": {
+          "all": [
+            {
+              "event": "person.entered_zone",
+              "args": {
+                "zone": "restricted",
+                "subject": "p1"
+              }
+            },
+            {
+              "predicate": "authorization.status",
+              "args": {
+                "subject": "p1",
+                "equals": "unauthorized"
+              }
+            }
+          ]
+        },
+        "then": {
+          "event_type": "restricted.zone.violation",
+          "action": [
+            "human_review"
+          ]
+        }
+      },
+      "events": [
+        {
+          "event_id": "a1",
+          "event_type": "person.entered_zone",
+          "start_s": 1,
+          "end_s": 1,
+          "attributes": {
+            "zone": "restricted",
+            "subject": "p1"
+          }
+        },
+        {
+          "event_id": "a2",
+          "event_type": "authorization.status",
+          "start_s": 1,
+          "end_s": 1,
+          "attributes": {
+            "subject": "p1",
+            "value": "unauthorized"
+          }
+        },
+        {
+          "event_id": "a3",
+          "event_type": "exception.active",
+          "start_s": 1,
+          "end_s": 1,
+          "attributes": {
+            "rule_id": "restricted_zone",
+            "value": true
+          }
+        },
+        {
+          "event_id": "h1",
+          "event_type": "camera.health",
+          "start_s": 0,
+          "end_s": 3,
+          "attributes": {
+            "status": "healthy"
+          }
+        }
+      ]
+    },
+    {
+      "id": "authorization_condition_without_exception",
+      "expected_decision": "confirmed",
+      "expected_raw_status": "true",
+      "rule": {
+        "id": "restricted_zone_authorization",
+        "version": 1,
+        "exceptions": [
+          {
+            "predicate": "exception.active",
+            "args": {
+              "rule_id": "restricted_zone",
+              "equals": true
+            }
+          }
+        ],
+        "when": {
+          "all": [
+            {
+              "event": "person.entered_zone",
+              "args": {
+                "zone": "restricted",
+                "subject": "p2"
+              }
+            },
+            {
+              "predicate": "authorization.status",
+              "args": {
+                "subject": "p2",
+                "equals": "unauthorized"
+              }
+            }
+          ]
+        },
+        "then": {
+          "event_type": "restricted.zone.violation",
+          "action": [
+            "human_review"
+          ]
+        }
+      },
+      "events": [
+        {
+          "event_id": "a1",
+          "event_type": "person.entered_zone",
+          "start_s": 1,
+          "end_s": 1,
+          "attributes": {
+            "zone": "restricted",
+            "subject": "p2"
+          }
+        },
+        {
+          "event_id": "a2",
+          "event_type": "authorization.status",
+          "start_s": 1,
+          "end_s": 1,
+          "attributes": {
+            "subject": "p2",
+            "value": "unauthorized"
+          }
+        },
+        {
+          "event_id": "h1",
+          "event_type": "camera.health",
+          "start_s": 0,
+          "end_s": 3,
+          "attributes": {
+            "status": "healthy"
+          }
+        }
+      ]
+    },
+    {
+      "id": "sequence_order_correct",
+      "expected_decision": "confirmed",
+      "expected_raw_status": "true",
+      "rule": {
+        "id": "open_then_close",
+        "version": 1,
+        "when": {
+          "sequence": [
+            {
+              "event": "lock.opened",
+              "args": {
+                "lock": "l1"
+              }
+            },
+            {
+              "event": "lock.closed",
+              "args": {
+                "lock": "l1"
+              }
+            }
+          ],
+          "within": "10s"
+        },
+        "then": {
+          "event_type": "lock.sequence_ok",
+          "action": [
+            "record"
+          ]
+        }
+      },
+      "events": [
+        {
+          "event_id": "s1",
+          "event_type": "lock.opened",
+          "start_s": 2,
+          "end_s": 2,
+          "attributes": {
+            "lock": "l1"
+          }
+        },
+        {
+          "event_id": "s2",
+          "event_type": "lock.closed",
+          "start_s": 7,
+          "end_s": 7,
+          "attributes": {
+            "lock": "l1"
+          }
+        },
+        {
+          "event_id": "h1",
+          "event_type": "camera.health",
+          "start_s": 0,
+          "end_s": 10,
+          "attributes": {
+            "status": "healthy"
+          }
+        }
+      ]
+    },
+    {
+      "id": "sequence_order_reversed",
+      "expected_decision": "not_triggered",
+      "expected_raw_status": "false",
+      "rule": {
+        "id": "open_then_close",
+        "version": 1,
+        "when": {
+          "sequence": [
+            {
+              "event": "lock.opened",
+              "args": {
+                "lock": "l1"
+              }
+            },
+            {
+              "event": "lock.closed",
+              "args": {
+                "lock": "l1"
+              }
+            }
+          ],
+          "within": "10s"
+        },
+        "then": {
+          "event_type": "lock.sequence_ok",
+          "action": [
+            "record"
+          ]
+        }
+      },
+      "events": [
+        {
+          "event_id": "s1",
+          "event_type": "lock.closed",
+          "start_s": 2,
+          "end_s": 2,
+          "attributes": {
+            "lock": "l1"
+          }
+        },
+        {
+          "event_id": "s2",
+          "event_type": "lock.opened",
+          "start_s": 7,
+          "end_s": 7,
+          "attributes": {
+            "lock": "l1"
+          }
+        },
+        {
+          "event_id": "h1",
+          "event_type": "camera.health",
+          "start_s": 0,
+          "end_s": 10,
+          "attributes": {
+            "status": "healthy"
+          }
+        }
+      ]
+    }
+  ],
+  "failure_fixtures": [
+    {
+      "id": "missing_quality_field",
+      "event": {
+        "event_id": "bad1",
+        "event_type": "person.visible",
+        "camera_id": "cam1",
+        "time": {
+          "start": "2026-01-01T00:00:00Z",
+          "end": null,
+          "clock_domain": "source"
+        },
+        "provenance": {
+          "source_type": "detector",
+          "source_id": "p0",
+          "model_version": null
+        }
+      },
+      "expected_error": "missing:quality"
+    },
+    {
+      "id": "missing_rule_then",
+      "rule": {
+        "id": "bad_rule",
+        "version": 1,
+        "when": {
+          "event": "person.visible"
+        }
+      },
+      "expected_error": "missing:then"
+    }
+  ]
+}
