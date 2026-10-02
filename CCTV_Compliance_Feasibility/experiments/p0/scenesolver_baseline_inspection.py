@@ -35,7 +35,7 @@ def main() -> int:
     external_drive_refs = []
     pretrained_calls = []
     for path in REPO.rglob("*"):
-        if not path.is_file() or ".git" in path.parts or "CCTV_Compliance_Feasibility" in path.parts:
+        if not path.is_file() or ".git" in path.parts or "CCTV-Compliance-Feasibility" in path.parts:
             continue
         if path.suffix not in {".py", ".ipynb", ".md", ".json", ".txt"}:
             continue
@@ -52,7 +52,7 @@ def main() -> int:
 
     checkpoint_paths = []
     for suffix in ("*.pt", "*.pth", "*.onnx", "*.ckpt"):
-        checkpoint_paths.extend(str(path.relative_to(REPO)) for path in REPO.rglob(suffix) if "CCTV_Compliance_Feasibility" not in path.parts)
+        checkpoint_paths.extend(str(path.relative_to(REPO)) for path in REPO.rglob(suffix) if "CCTV-Compliance-Feasibility" not in path.parts)
 
     dependencies = dependency_status(["torch", "cv2", "numpy", "ultralytics", "psutil", "jupyter"])
     artifact_hash = hashlib.sha256(ARTIFACT.read_bytes()).hexdigest() if ARTIFACT.exists() else None
@@ -87,7 +87,7 @@ def main() -> int:
             "python_modules": dependencies,
             "checkpoint_paths_found_outside_study": checkpoint_paths,
             "files_with_external_drive_or_pretrained_references": sorted(set(external_drive_refs + pretrained_calls))[:80],
-            "source_video_found_in_repository": any(path.suffix.lower() in {".mp4", ".avi", ".mkv", ".mov"} for path in REPO.rglob("*") if "CCTV_Compliance_Feasibility" not in path.parts),
+            "source_video_found_in_repository": any(path.suffix.lower() in {".mp4", ".avi", ".mkv", ".mov"} for path in REPO.rglob("*") if "CCTV-Compliance-Feasibility" not in path.parts),
         },
         "failure_conditions": [
             "The report artifact references Google Drive frame paths that are not present at those absolute paths in this checkout.",
