@@ -377,7 +377,7 @@
       "id": "cooldown_and_debounce",
       "expected_decision": "confirmed",
       "expected_raw_status": "true",
-      "expected_alert_count": 1,
+      "expected_cooldown_qualified_interval_count": 1,
       "rule": {
         "id": "door_open_debounced",
         "version": 1,

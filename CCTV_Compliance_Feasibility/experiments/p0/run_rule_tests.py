@@ -60,14 +60,14 @@ def main() -> int:
             "expected_raw_status": actual_first is not None and actual_first["raw_status"] == case["expected_raw_status"],
             "deterministic_replay": actual_first == actual_second,
         }
-        if "expected_alert_count" in case:
-            checks["expected_alert_count"] = actual_first is not None and actual_first["alert_count"] == case["expected_alert_count"]
+        if "expected_cooldown_qualified_interval_count" in case:
+            checks["expected_cooldown_qualified_interval_count"] = actual_first is not None and actual_first["cooldown_qualified_interval_count"] == case["expected_cooldown_qualified_interval_count"]
         passed = all(checks.values())
         all_passed = all_passed and passed
         results.append({
             "id": case["id"],
             "status": "passed" if passed else "failed",
-            "expected": {key: case[key] for key in ("expected_decision", "expected_raw_status", "expected_alert_count") if key in case},
+            "expected": {key: case[key] for key in ("expected_decision", "expected_raw_status", "expected_cooldown_qualified_interval_count") if key in case},
             "actual": actual_first,
             "checks": checks,
             "event_count": len(events),
@@ -106,6 +106,7 @@ def main() -> int:
         "limitations": [
             "Synthetic traces only; no customer/site data.",
             "The evaluator intentionally implements only operators exercised by these fixtures.",
+            "Configured unknown_policy actions (suppress, delay, escalate_review, treat_as_false) are not executed by this P0 evaluator.",
             "No perception accuracy, camera capacity or deployment SLO is inferred.",
         ],
     }

@@ -20,7 +20,7 @@ Properties:
 - Synthetic event streams test temporal rules without any model.
 - Every observation includes quality, source, model version, frame/time bounds and provenance.
 
-**P0 success:** rules for zone entry + authorization, duration, gate state duration, object placement, ordered sequence, absence and cooldown pass unit/replay tests; model-independent rule tests exist.
+**P0 success criteria include:** zone entry + authorization, duration, gate state duration, object placement, ordered sequence, absence and cooldown passing unit/replay tests when their fixtures and representative inputs are available; model-independent rule tests exist. The checked-in P0 fixtures do not include an object-placement case.
 
 ## Prototype P1: live single-camera edge
 

@@ -30,7 +30,7 @@
 
 The rule and replay results demonstrate selected implementation conformance and deterministic contract behavior on synthetic inputs. The specialised CV result demonstrates separation of detection output, tracking/trajectory state and deterministic policy logic. The replay's open interval records observed duration up to stream end and does not fabricate an exit. They do not establish visual accuracy, customer-site generalisation, camera capacity, deployment throughput, power, memory envelope or legal compliance.
 
-The evaluator is intentionally incomplete. It does not establish continuous health coverage across an entire temporal interval, unknown propagation in every sequence case, complete unknown handling for missing simple events, alert candidate extraction for every nested expression or complete JSON Schema validation. These are P0 limitations, not production-engine implementation goals.
+The evaluator is intentionally incomplete. It does not establish continuous health coverage across an entire temporal interval, unknown propagation in every sequence case, complete unknown handling for missing simple events, alert candidate extraction for every nested expression or complete JSON Schema validation. It also does not execute the configured `unknown_policy` actions (`suppress`, `delay`, `escalate_review`, `treat_as_false`). These are P0 limitations, not production-engine implementation goals.
 
 The SceneSolver result is repository evidence plus artifact inspection. It is not a new SceneSolver accuracy result. Existing SceneSolver production and research directories were not modified.
 

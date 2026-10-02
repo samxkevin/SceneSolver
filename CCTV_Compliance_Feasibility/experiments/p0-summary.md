@@ -21,7 +21,7 @@ Wall-time values are retained in the machine-readable JSON artifacts for reprodu
 - `not_triggered`: gate below duration, action completed before deadline and reversed sequence ordering.
 - `unknown`: camera/data gap during a required healthy observation window.
 - `suppressed_by_exception`: an otherwise true unauthorized-zone condition with an active exception.
-- Cooldown/debounce case: a one-second open interval did not qualify; two qualifying candidates at 3 and 8 seconds emitted one alert under a 10 second cooldown.
+- Cooldown/debounce case: a one-second open interval did not qualify; two qualifying interval candidates at 3 and 8 seconds yielded one cooldown-qualified interval start anchor under a 10 second cooldown. P0 does not measure online alert latency or execute an alert scheduler.
 
 ### P0 semantic limitations
 
@@ -31,7 +31,8 @@ The evaluator is intentionally incomplete and does not establish full production
 2. unknown propagation in every sequence case;
 3. complete unknown handling for missing simple events;
 4. alert candidate extraction for every possible nested rule expression;
-5. complete JSON Schema validation.
+5. complete JSON Schema validation;
+6. the configured `unknown_policy` action semantics (`suppress`, `delay`, `escalate_review`, `treat_as_false`).
 
 These are transparency limits for the focused P0 pass, not a request to implement a production rule engine in this study.
 

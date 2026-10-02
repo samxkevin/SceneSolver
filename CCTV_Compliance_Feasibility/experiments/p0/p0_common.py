@@ -233,6 +233,7 @@ def candidate_times(expression: Dict[str, Any], events: List[Dict[str, Any]]) ->
 
 
 def evaluate_rule(rule: Dict[str, Any], events: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Evaluate selected fixture expressions; configured unknown_policy actions are not executed."""
     raw_status = evaluate(rule["when"], events)
     exception_statuses = [evaluate(item, events) for item in rule.get("exceptions", [])]
     suppressed = "true" in exception_statuses
@@ -250,14 +251,16 @@ def evaluate_rule(rule: Dict[str, Any], events: List[Dict[str, Any]]) -> Dict[st
     for candidate in candidates:
         if not emitted or candidate - emitted[-1] >= cooldown:
             emitted.append(candidate)
+    qualified = emitted if decision == "confirmed" else []
     return {
         "raw_status": raw_status,
         "decision": decision,
         "exception_statuses": exception_statuses,
-        "candidate_times_s": candidates,
+        "qualifying_interval_start_s": candidates,
         "cooldown_s": cooldown,
-        "emitted_alert_times_s": emitted if decision == "confirmed" else [],
-        "alert_count": len(emitted) if decision == "confirmed" else 0,
+        "cooldown_qualified_interval_start_s": qualified,
+        "cooldown_qualified_interval_count": len(qualified),
+        "online_alert_latency_ms": "not_available",
     }
 
 

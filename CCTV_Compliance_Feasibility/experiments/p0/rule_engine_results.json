@@ -9,7 +9,7 @@
   "failure_fixture_count": 2,
   "passed_count": 11,
   "failure_fixture_passed_count": 2,
-  "wall_time_ms": 0.884,
+  "wall_time_ms": 0.924,
   "tests": [
     {
       "id": "zone_entry_dwell_confirmed",
@@ -22,14 +22,15 @@
         "raw_status": "true",
         "decision": "confirmed",
         "exception_statuses": [],
-        "candidate_times_s": [
+        "qualifying_interval_start_s": [
           0.0
         ],
         "cooldown_s": 30.0,
-        "emitted_alert_times_s": [
+        "cooldown_qualified_interval_start_s": [
           0.0
         ],
-        "alert_count": 1
+        "cooldown_qualified_interval_count": 1,
+        "online_alert_latency_ms": "not_available"
       },
       "checks": {
         "schema_adapter_valid": true,
@@ -51,10 +52,11 @@
         "raw_status": "false",
         "decision": "not_triggered",
         "exception_statuses": [],
-        "candidate_times_s": [],
+        "qualifying_interval_start_s": [],
         "cooldown_s": 0.0,
-        "emitted_alert_times_s": [],
-        "alert_count": 0
+        "cooldown_qualified_interval_start_s": [],
+        "cooldown_qualified_interval_count": 0,
+        "online_alert_latency_ms": "not_available"
       },
       "checks": {
         "schema_adapter_valid": true,
@@ -76,10 +78,11 @@
         "raw_status": "false",
         "decision": "not_triggered",
         "exception_statuses": [],
-        "candidate_times_s": [],
+        "qualifying_interval_start_s": [],
         "cooldown_s": 0.0,
-        "emitted_alert_times_s": [],
-        "alert_count": 0
+        "cooldown_qualified_interval_start_s": [],
+        "cooldown_qualified_interval_count": 0,
+        "online_alert_latency_ms": "not_available"
       },
       "checks": {
         "schema_adapter_valid": true,
@@ -101,10 +104,11 @@
         "raw_status": "true",
         "decision": "confirmed",
         "exception_statuses": [],
-        "candidate_times_s": [],
+        "qualifying_interval_start_s": [],
         "cooldown_s": 0.0,
-        "emitted_alert_times_s": [],
-        "alert_count": 0
+        "cooldown_qualified_interval_start_s": [],
+        "cooldown_qualified_interval_count": 0,
+        "online_alert_latency_ms": "not_available"
       },
       "checks": {
         "schema_adapter_valid": true,
@@ -126,10 +130,11 @@
         "raw_status": "true",
         "decision": "confirmed",
         "exception_statuses": [],
-        "candidate_times_s": [],
+        "qualifying_interval_start_s": [],
         "cooldown_s": 0.0,
-        "emitted_alert_times_s": [],
-        "alert_count": 0
+        "cooldown_qualified_interval_start_s": [],
+        "cooldown_qualified_interval_count": 0,
+        "online_alert_latency_ms": "not_available"
       },
       "checks": {
         "schema_adapter_valid": true,
@@ -151,10 +156,11 @@
         "raw_status": "unknown",
         "decision": "unknown",
         "exception_statuses": [],
-        "candidate_times_s": [],
+        "qualifying_interval_start_s": [],
         "cooldown_s": 0.0,
-        "emitted_alert_times_s": [],
-        "alert_count": 0
+        "cooldown_qualified_interval_start_s": [],
+        "cooldown_qualified_interval_count": 0,
+        "online_alert_latency_ms": "not_available"
       },
       "checks": {
         "schema_adapter_valid": true,
@@ -171,28 +177,29 @@
       "expected": {
         "expected_decision": "confirmed",
         "expected_raw_status": "true",
-        "expected_alert_count": 1
+        "expected_cooldown_qualified_interval_count": 1
       },
       "actual": {
         "raw_status": "true",
         "decision": "confirmed",
         "exception_statuses": [],
-        "candidate_times_s": [
+        "qualifying_interval_start_s": [
           3.0,
           8.0
         ],
         "cooldown_s": 10.0,
-        "emitted_alert_times_s": [
+        "cooldown_qualified_interval_start_s": [
           3.0
         ],
-        "alert_count": 1
+        "cooldown_qualified_interval_count": 1,
+        "online_alert_latency_ms": "not_available"
       },
       "checks": {
         "schema_adapter_valid": true,
         "expected_decision": true,
         "expected_raw_status": true,
         "deterministic_replay": true,
-        "expected_alert_count": true
+        "expected_cooldown_qualified_interval_count": true
       },
       "event_count": 4,
       "validation_errors": []
@@ -210,10 +217,11 @@
         "exception_statuses": [
           "true"
         ],
-        "candidate_times_s": [],
+        "qualifying_interval_start_s": [],
         "cooldown_s": 0.0,
-        "emitted_alert_times_s": [],
-        "alert_count": 0
+        "cooldown_qualified_interval_start_s": [],
+        "cooldown_qualified_interval_count": 0,
+        "online_alert_latency_ms": "not_available"
       },
       "checks": {
         "schema_adapter_valid": true,
@@ -237,10 +245,11 @@
         "exception_statuses": [
           "unknown"
         ],
-        "candidate_times_s": [],
+        "qualifying_interval_start_s": [],
         "cooldown_s": 0.0,
-        "emitted_alert_times_s": [],
-        "alert_count": 0
+        "cooldown_qualified_interval_start_s": [],
+        "cooldown_qualified_interval_count": 0,
+        "online_alert_latency_ms": "not_available"
       },
       "checks": {
         "schema_adapter_valid": true,
@@ -262,10 +271,11 @@
         "raw_status": "true",
         "decision": "confirmed",
         "exception_statuses": [],
-        "candidate_times_s": [],
+        "qualifying_interval_start_s": [],
         "cooldown_s": 0.0,
-        "emitted_alert_times_s": [],
-        "alert_count": 0
+        "cooldown_qualified_interval_start_s": [],
+        "cooldown_qualified_interval_count": 0,
+        "online_alert_latency_ms": "not_available"
       },
       "checks": {
         "schema_adapter_valid": true,
@@ -287,10 +297,11 @@
         "raw_status": "false",
         "decision": "not_triggered",
         "exception_statuses": [],
-        "candidate_times_s": [],
+        "qualifying_interval_start_s": [],
         "cooldown_s": 0.0,
-        "emitted_alert_times_s": [],
-        "alert_count": 0
+        "cooldown_qualified_interval_start_s": [],
+        "cooldown_qualified_interval_count": 0,
+        "online_alert_latency_ms": "not_available"
       },
       "checks": {
         "schema_adapter_valid": true,
@@ -323,6 +334,7 @@
   "limitations": [
     "Synthetic traces only; no customer/site data.",
     "The evaluator intentionally implements only operators exercised by these fixtures.",
+    "Configured unknown_policy actions (suppress, delay, escalate_review, treat_as_false) are not executed by this P0 evaluator.",
     "No perception accuracy, camera capacity or deployment SLO is inferred."
   ]
 }
