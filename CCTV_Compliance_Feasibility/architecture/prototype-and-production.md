@@ -2,7 +2,7 @@
 
 ## Prototype P0: offline, privacy-preserving replay
 
-**Goal:** prove contracts and rule semantics before model selection.
+**Goal:** establish the selected contracts and test the selected rule semantics before model selection.
 
 ```text
 video file -> deterministic sampler -> detector adapter (recorded or live)
