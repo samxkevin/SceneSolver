@@ -37,7 +37,7 @@ Split by camera/site/time/person/session where possible; never let near-duplicat
 
 ## E-17: Same-input architecture comparison
 
-Run four arms on the same frozen replay manifest and rule definitions:
+Define a future run for four arms on the same frozen replay manifest and rule definitions. Comparative execution remains pending representative data and target hardware:
 
 | Arm | Definition | Required measurements |
 |---|---|---|

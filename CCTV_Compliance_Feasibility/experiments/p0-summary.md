@@ -2,7 +2,7 @@
 
 **Status:** Feasibility study with empirical evaluation protocol; measurements pending where target data/hardware are unavailable.
 
-This summary reports only the focused P0 pass. It separates measured outputs, existing repository evidence, published context, engineering interpretation and open work.
+This summary reports only the focused P0 pass. It separates measured outputs, existing repository evidence, published context, engineering interpretation and open work. The four-arm comparison protocol has not been executed; the P0 results below are not comparative benchmark results.
 
 ## MEASURED
 
@@ -35,7 +35,7 @@ The evaluator is intentionally incomplete and does not establish full production
 
 These are transparency limits for the focused P0 pass, not a request to implement a production rule engine in this study.
 
-## REPOSITORY EVIDENCE
+## REPOSITORY EVIDENCE: HISTORICAL SCENESOLVER METRICS, NOT CCTV COMPLIANCE VALIDATION
 
 The existing SceneSolver repository artifacts report:
 
@@ -71,4 +71,4 @@ No new deployment measurement was produced from a published benchmark. Existing 
 
 ## Submission conclusion
 
-The P0 evidence supports a **feasible architecture**, not a proven deployment. The first prototype should remain small: model-neutral event and rule contracts, deterministic replay, one lightweight perception adapter, bounded evidence and explicit unknown/degraded handling. Target-site accuracy, camera capacity, quantisation benefit, VLM value, sensor value, cost and legal or governance approval remain experimental or organisational work.
+The P0 evidence supports a **credible architectural direction**, not a proven deployment. The first prototype should remain small: model-neutral event and rule contracts, deterministic replay, one lightweight perception adapter, bounded evidence and explicit unknown/degraded handling. Target-site accuracy, camera capacity, quantisation benefit, VLM value, sensor value, cost and legal or governance approval remain experimental or organisational work.

@@ -58,7 +58,7 @@ Measured P0 artifacts:
 - a specialised CV contract path using precomputed detections;
 - inspection of the existing SceneSolver report artifact and its reproducibility blockers.
 
-The P0 results support **feasible architecture**, not **proven deployment performance**. Existing SceneSolver accuracy figures remain repository evidence with their support, split and task limitations. Quantisation and VLM review remain pending because an exact model/runtime/hardware or readily available lightweight model was not present.
+The P0 results support a **credible architectural direction**, not **proven deployment performance**. Existing SceneSolver accuracy figures remain repository evidence with their support, split and task limitations. Quantisation and VLM review remain pending because an exact model/runtime/hardware or readily available lightweight model was not present.
 
 ## SceneSolver disposition
 

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This plan turns SceneSolver from a repository inventory into a reproducible comparison arm. It does not modify the existing SceneSolver pipeline. The comparison uses one common replay harness, one locked input manifest, one normalized output contract, and one evaluation protocol for four primary systems plus an optional parallel sensor arm:
+This document defines a comparison protocol, not completed benchmarking. It turns SceneSolver from a repository inventory into a reproducible future comparison arm without modifying the existing SceneSolver pipeline. Comparative execution remains pending representative data and target hardware. The protocol uses one common replay harness, one locked input manifest, one normalized output contract, and one evaluation protocol for four primary systems plus an optional parallel sensor arm:
 
 1. **S0: SceneSolver reference pipeline**
 2. **S1: Specialised CV baseline**

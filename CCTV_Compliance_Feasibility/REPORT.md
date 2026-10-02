@@ -5,7 +5,7 @@
 **Primary requirement source:** the mission/context document supplied for this study
 **Repository baseline:** SceneSolver at the parent directory
 
-> **Executive answer:** The system is technically feasible for a defined set of owner rules. The defensible core is not a single LLM or VLM. It is local or near-local perception plus tracking/state estimation, a typed temporal event representation, deterministic rule evaluation, bounded evidence and an alert workflow. A VLM can be selectively invoked for open-ended visual review or narrative, but it must not be the final executor of policy. SceneSolver is a valuable research/reference baseline and component library, not evidence that the new compliance system is already solved.
+> **Executive answer:** The proposed architecture is technically plausible for a defined set of owner rules, subject to validation on representative data and target hardware. The defensible core is not a single LLM or VLM. It is local or near-local perception plus tracking/state estimation, a typed temporal event representation, deterministic rule evaluation, bounded evidence and an alert workflow. A VLM can be selectively invoked for open-ended visual review or narrative, but it must not be the final executor of policy. SceneSolver is a valuable research/reference baseline and component library, not evidence that the new compliance system is already solved.
 
 ## 1. Executive Summary
 
@@ -29,7 +29,7 @@ Core CV
 
 Sensor integration may substitute for a visual predicate or provide a parallel corroborating signal. It is not presumed to be the final additive stage.
 
-SceneSolver remains a reference baseline. The study now includes a same-input comparison protocol for four arms: SceneSolver, specialised CV, the hierarchical core, and the hierarchical core plus optional VLM. The focused P0 pass provides measured conformance on selected synthetic rule fixtures, a model-neutral replay contract, a specialised CV contract path and repository artifact inspection. No camera capacity, deployment FPS, accuracy threshold, cost or production suitability number is fabricated. Requirement mapping from the supplied mission/context document is in [`requirements-traceability.md`](requirements-traceability.md).
+SceneSolver remains a reference baseline. The study defines a same-input comparison protocol for four primary arms: SceneSolver, specialised CV, the hierarchical core, and the hierarchical core plus optional VLM, with a parallel sensor arm where applicable. **Comparison protocol defined; comparative execution remains pending representative data and target hardware.** The focused P0 pass provides measured conformance on selected synthetic rule fixtures, a model-neutral replay contract, a specialised CV contract path and repository artifact inspection. No camera capacity, deployment FPS, accuracy threshold, cost or production suitability number is fabricated. Requirement mapping from the supplied mission/context document is in [`requirements-traceability.md`](requirements-traceability.md).
 
 ### 1.1 Evidence status at submission
 
@@ -191,11 +191,22 @@ Start with an event ontology and annotation guide. Collect target-camera normal 
 
 SceneSolver metrics require caveats about support, split lineage, possible leakage, missing deployment measurements and task mismatch. See [`baseline/scenesolver-analysis.md`](baseline/scenesolver-analysis.md).
 
+### Historical SceneSolver Repository Metrics, Not CCTV Compliance Validation
+
+The following values are retained as **existing repository artifacts only**:
+
+- binary TimeSformer test accuracy: `0.9667`, support `30`;
+- seven-class report accuracy: `0.842857`;
+- macro F1: `0.823514`;
+- weighted F1: `0.839174`, support `140`.
+
+P0 did not retrain or rerun these models. These artifacts do not establish target-site accuracy or the proposed architecture's compliance performance. They also do not establish deployment latency, throughput, memory, power or camera capacity. Task, split and support conditions are limited or incomplete, including a possible split-leakage concern documented in the baseline analysis.
+
 ## 24. Evaluation Methodology
 
 Use synthetic event traces for rule semantics, controlled staged scenes for repeatability and naturalistic time-separated/site-separated holdout for deployment validity. Tune thresholds on calibration data, lock test data, stratify by condition, inspect worst cases and retain raw predictions/config hashes.
 
-The reproducible four-arm comparison uses identical replay inputs, annotations, rule definitions, ROI geometry, hardware profile and output contract. The required protocol and measurement ledger are in [`baseline/empirical-comparison-plan.md`](baseline/empirical-comparison-plan.md). The focused P0 results are in [`experiments/p0-summary.md`](experiments/p0-summary.md).
+The defined four-arm comparison protocol uses identical replay inputs, annotations, rule definitions, ROI geometry, hardware profile and output contract. Comparative execution has not been completed and remains pending representative data and target hardware. The required protocol and measurement ledger are in [`baseline/empirical-comparison-plan.md`](baseline/empirical-comparison-plan.md). The focused P0 results are in [`experiments/p0-summary.md`](experiments/p0-summary.md).
 
 ## 25. Metrics
 
