@@ -8,10 +8,12 @@ This summary reports only the focused P0 pass. It separates measured outputs, ex
 
 | Evidence | Result | What it establishes | Limitation |
 |---|---|---|---|
-| Rule engine replay | 11/11 synthetic rule cases passed; 2/2 malformed-input fixtures were rejected as expected; all deterministic replay checks passed | Zone entry/dwell, gate duration false case, required action before deadline, absence, unknown camera gap, cooldown/debounce, authorization/exception and sequence ordering preserve true/false/unknown behavior | Synthetic traces only; evaluator covers only P0 operators |
-| Model-neutral replay | 13 structured frames decoded by the adapter, 7 sampled, 6 skipped, 0 dropped; 7 observations, 3 events, 1 track, confirmed rule decision and bounded metadata evidence manifest | The proposed decode-to-evidence contract can be exercised without coupling rule logic to a model | Structured frames and precomputed detections replaced video decode and perception |
-| Specialised CV reference path | 13 detector-adapter records, 1 track, 5.0 second zone dwell, 3.0 second rule threshold, confirmed decision; measured harness runtime 0.186 ms | Learned-perception output can be separated from tracking/trajectory, deterministic zone duration and policy evaluation | No learned detector ran; no visual accuracy or deployment throughput |
-| SceneSolver artifact inspection | Existing `analysis.json` parsed in 0.341 ms; metadata records 3366 frames at 30 FPS, 320x240, 112.2 seconds; 44 anomaly records and 55 packaged JPEG files | The committed repository artifact and its outputs can be inspected and retained as baseline evidence | This is artifact inspection, not SceneSolver inference runtime or new accuracy measurement |
+| Rule engine replay | 11/11 checked synthetic rule fixtures passed; 2/2 malformed-input fixtures were rejected as expected; all deterministic replay checks passed | Selected implementation conformance for true, false, unknown, cooldown, exception and sequence cases | Expected outputs are encoded in checked-in fixtures; synthetic cases are not independent validation of business semantics |
+| Model-neutral replay | 2 FPS source timing, 13 structured frames processed by the adapter, 7 sampled, 6 skipped, 0 dropped; 7 observations, 3 events, 1 track, confirmed rule decision and bounded metadata evidence manifest; the dwell interval remains open with 5.0 seconds observed up to stream end | The proposed event-to-evidence contract can be exercised without coupling rule logic to a model, and incomplete intervals are not treated as completed exits | Structured frames and precomputed detections replaced video decode and perception |
+| Specialised CV reference path | 13 detector-adapter records, 1 track, 5.0 second observed zone dwell open at stream end, 3.0 second rule threshold and confirmed decision | Learned-perception output can be separated from tracking/trajectory, deterministic zone duration and policy evaluation | No learned detector ran; no visual accuracy or deployment throughput |
+| SceneSolver artifact inspection | Existing `analysis.json` parsed; metadata records 3366 frames at 30 FPS, 320x240, 112.2 seconds; 44 anomaly records and 55 packaged JPEG files | The committed repository artifact and its outputs can be inspected and retained as baseline evidence | This is artifact inspection, not SceneSolver inference runtime or new accuracy measurement |
+
+Wall-time values are retained in the machine-readable JSON artifacts for reproducibility of the small scripts. They are **synthetic contract replay runtime** or artifact inspection time, not CCTV inference latency, camera throughput, deployment FPS or real-time system performance.
 
 ### Rule result details
 
@@ -20,6 +22,18 @@ This summary reports only the focused P0 pass. It separates measured outputs, ex
 - `unknown`: camera/data gap during a required healthy observation window.
 - `suppressed_by_exception`: an otherwise true unauthorized-zone condition with an active exception.
 - Cooldown/debounce case: a one-second open interval did not qualify; two qualifying candidates at 3 and 8 seconds emitted one alert under a 10 second cooldown.
+
+### P0 semantic limitations
+
+The evaluator is intentionally incomplete and does not establish full production rule semantics. It currently does not establish:
+
+1. continuous health coverage across an entire temporal interval;
+2. unknown propagation in every sequence case;
+3. complete unknown handling for missing simple events;
+4. alert candidate extraction for every possible nested rule expression;
+5. complete JSON Schema validation.
+
+These are transparency limits for the focused P0 pass, not a request to implement a production rule engine in this study.
 
 ## REPOSITORY EVIDENCE
 

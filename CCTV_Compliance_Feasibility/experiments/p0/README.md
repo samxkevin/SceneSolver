@@ -6,8 +6,8 @@
 
 | Artifact | Command | Result |
 |---|---|---|
-| Rule engine | `python run_rule_tests.py` | 11 synthetic cases passed, 2 malformed-input fixtures passed, deterministic replay checks passed |
-| Replay contract | `python replay_harness.py` | structured frame replay passed through decode adapter, sampling, observation, event, temporal state, rule and evidence stages |
+| Rule engine | `python run_rule_tests.py` | 11 checked synthetic fixtures passed, 2 malformed-input fixtures passed, deterministic replay checks passed |
+| Replay contract | `python replay_harness.py` | structured frame replay passed through decode adapter, sampling, observation, event, temporal state, rule and evidence stages; final dwell interval is open at stream end |
 | Specialised CV reference | `python specialised_cv_reference.py` | precomputed-detection adapter passed detector seam, single-track trajectory, zone dwell and rule path |
 | SceneSolver baseline | `python scenesolver_baseline_inspection.py` | existing report artifact inspected; no retraining or inference performed |
 | Quantisation | not run | exact model, runtime and target hardware unavailable |
@@ -28,7 +28,9 @@
 
 ## Interpretation boundary
 
-The rule and replay results demonstrate deterministic contract behavior on synthetic inputs. The specialised CV result demonstrates separation of detection output, tracking/trajectory state and deterministic policy logic. They do not establish visual accuracy, customer-site generalisation, camera capacity, deployment throughput, power, memory envelope or legal compliance.
+The rule and replay results demonstrate selected implementation conformance and deterministic contract behavior on synthetic inputs. The specialised CV result demonstrates separation of detection output, tracking/trajectory state and deterministic policy logic. The replay's open interval records observed duration up to stream end and does not fabricate an exit. They do not establish visual accuracy, customer-site generalisation, camera capacity, deployment throughput, power, memory envelope or legal compliance.
+
+The evaluator is intentionally incomplete. It does not establish continuous health coverage across an entire temporal interval, unknown propagation in every sequence case, complete unknown handling for missing simple events, alert candidate extraction for every nested expression or complete JSON Schema validation. These are P0 limitations, not production-engine implementation goals.
 
 The SceneSolver result is repository evidence plus artifact inspection. It is not a new SceneSolver accuracy result. Existing SceneSolver production and research directories were not modified.
 
@@ -43,4 +45,4 @@ python CCTV_Compliance_Feasibility/experiments/p0/specialised_cv_reference.py
 python CCTV_Compliance_Feasibility/experiments/p0/scenesolver_baseline_inspection.py
 ```
 
-The scripts use only the Python standard library. Wall-time values are measurements of this small harness or artifact inspection, not model or deployment benchmarks.
+The scripts use only the Python standard library. Wall-time values are measurements of this small synthetic contract harness or artifact inspection. They are not CCTV inference latency, camera throughput, deployment FPS or real-time system performance.

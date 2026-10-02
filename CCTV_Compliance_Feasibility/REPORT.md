@@ -29,19 +29,19 @@ Core CV
 
 Sensor integration may substitute for a visual predicate or provide a parallel corroborating signal. It is not presumed to be the final additive stage.
 
-SceneSolver remains a reference baseline. The study now includes a same-input comparison protocol for four arms: SceneSolver, specialised CV, the hierarchical core, and the hierarchical core plus optional VLM. The focused P0 pass provides measured synthetic rule evaluation, a model-neutral replay contract, a specialised CV contract path and repository artifact inspection. No camera capacity, deployment FPS, accuracy threshold, cost or production suitability number is fabricated. Requirement mapping from the supplied mission/context document is in [`requirements-traceability.md`](requirements-traceability.md).
+SceneSolver remains a reference baseline. The study now includes a same-input comparison protocol for four arms: SceneSolver, specialised CV, the hierarchical core, and the hierarchical core plus optional VLM. The focused P0 pass provides measured conformance on selected synthetic rule fixtures, a model-neutral replay contract, a specialised CV contract path and repository artifact inspection. No camera capacity, deployment FPS, accuracy threshold, cost or production suitability number is fabricated. Requirement mapping from the supplied mission/context document is in [`requirements-traceability.md`](requirements-traceability.md).
 
 ### 1.1 Evidence status at submission
 
 | Evidence | Status | What it establishes | Limitation |
 |---|---|---|---|
-| Rule engine replay | measured | deterministic policy semantics for true, false, unknown, cooldown, exception and sequence cases | synthetic traces only |
+| Rule engine replay | measured | selected fixture conformance and deterministic replay for true, false, unknown, cooldown, exception and sequence cases | expected outputs are encoded in fixtures; synthetic cases are not independent business-semantic validation |
 | SceneSolver baseline | measured/repository | existing capability, output artifact and reproducibility limitations | target-site deployment not established |
 | Specialised CV path | measured contract path | perception output can feed tracking, trajectory, zone duration and rules | no production detector accuracy |
 | Quantisation | pending | no new precision tradeoff result | exact model, runtime and hardware unavailable |
 | VLM review | pending | bounded advisory architecture remains defined | no readily available lightweight model was tested |
 
-The complete P0 package is [`experiments/p0-summary.md`](experiments/p0-summary.md), with machine-readable results under [`experiments/p0/`](experiments/p0/).
+The complete P0 package is [`experiments/p0-summary.md`](experiments/p0-summary.md), with machine-readable results under [`experiments/p0/`](experiments/p0/). The small wall-time values retained in those JSON files are synthetic contract replay or artifact inspection timings, not CCTV inference latency, camera throughput, deployment FPS or real-time system performance.
 
 ## 2. Problem Definition
 
@@ -157,7 +157,7 @@ Owner policy metadata should include purpose, scope, policy owner, version, perm
 
 ## 17. Temporal Reasoning Architecture
 
-The event seam has raw observations, derived state, transitions, intervals and rule decisions. It tracks source/monotonic time, gaps, open/complete intervals, unknown state, entity binding, provenance and calibration. A 30-second duration is elapsed time under an allowed-gap policy, not 30 frames. A missing camera interval cannot satisfy an absence rule.
+The event seam has raw observations, derived state, transitions, intervals and rule decisions. It tracks source/monotonic time, gaps, open/complete intervals, unknown state, entity binding, provenance and calibration. A 30-second duration is elapsed time under an allowed-gap policy, not 30 frames. A missing camera interval cannot satisfy an absence rule. The P0 replay explicitly records observed duration up to stream end as an open interval when no exit is observed; it does not infer a completed exit.
 
 ## 18. Evidence Generation Architecture
 
@@ -205,7 +205,7 @@ System measurements include total runtime, stage latency, RAM, VRAM, frames deco
 
 ## 26. Prototype Architecture
 
-The feasibility P0 is offline local replay with synthetic adapters and deterministic rules. It now measures rule semantics, a model-neutral event/evidence contract and a specialised CV contract path without pretending to be visual accuracy. A later prototype can be one edge camera with a small detector/tracker, zones, timers, local evidence and health. Sensor integration should be tested as a parallel arm where a trusted sensor exists. Do not add a VLM to the critical path before the core is measurable. Multi-camera infrastructure and durable production services are outside this submission pass.
+The feasibility P0 is offline local replay with synthetic adapters and deterministic rules. It now measures selected rule-fixture conformance, a model-neutral event/evidence contract and a specialised CV contract path without pretending to be visual accuracy. A later prototype can be one edge camera with a small detector/tracker, zones, timers, local evidence and health. Sensor integration should be tested as a parallel arm where a trusted sensor exists. Do not add a VLM to the critical path before the core is measurable. Multi-camera infrastructure and durable production services are outside this submission pass.
 
 ## 27. Minimum Viable Prototype
 
@@ -248,6 +248,6 @@ The largest blockers are the first rule ontology, trusted sensor/access-control 
 9. Keep continuous raw CCTV and routine policy evaluation at the edge where privacy requires; export only controlled, minimised data.
 10. Include amortisation, power, storage, cloud GPU, bandwidth, egress, maintenance, cameras per device and cost per camera-hour or month in the decision.
 11. Do not claim CPU, NPU, GPU or cloud capacity until the complete pipeline and target conditions are measured.
-12. The P0 evidence pass demonstrates deterministic rule semantics and model-neutral contract flow, but not visual accuracy or deployment capacity.
+12. The P0 evidence pass demonstrates selected fixture conformance, deterministic replay and model-neutral contract flow, but not complete rule semantics, visual accuracy or deployment capacity.
 13. The first prototype should contain one lightweight perception adapter, one tracker/trajectory path, typed events, deterministic rules, bounded evidence and replay tests. It should not contain a dashboard, production multi-camera service or mandatory VLM.
 14. The next evidence action is to replace synthetic inputs with approved site-like replay data and one exact target hardware profile, then measure the branches separately before choosing retained components.

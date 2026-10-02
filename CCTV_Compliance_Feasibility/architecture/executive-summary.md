@@ -38,12 +38,12 @@ Deterministic policy evaluation is authoritative. VLM output is advisory, bounde
 | What should stay on edge? | Raw streams, routine perception, tracker/state, deterministic rules, health, ring buffer and routine evidence by default | Privacy architecture; site deployment pending |
 | What can move to cloud? | Approved training, batch analytics and selective redacted evidence review where policy, residency, cost and egress permit | No cloud run; policy boundary specified |
 | How is privacy preserved? | Minimise raw retention, keep raw video and keys local by default, send only approved metadata or redacted evidence, restrict access and audit egress | Design and synthetic metadata evidence path measured; governance approval pending |
-| How are owner-defined rules represented? | Versioned schema-validated expressions over typed events with temporal operators, exceptions, authorization, schedules, cooldowns and human-review actions | Synthetic rule fixtures measured |
-| How are temporal events represented? | Source and monotonic-derived time bounds, transitions, intervals, provenance, quality and explicit unknown/degraded state | P0 replay emitted events and a temporal interval |
-| How is a violation verified? | Reproduce the event trace, evaluate deterministic conditions, confirm health/quality and attach bounded evidence. Human review applies for ambiguous or high-impact policy actions | P0 confirmed a synthetic policy result and evidence hash |
+| How are owner-defined rules represented? | Versioned schema-validated expressions over typed events with temporal operators, exceptions, authorization, schedules, cooldowns and human-review actions | Selected synthetic rule fixtures measured for conformance |
+| How are temporal events represented? | Source and monotonic-derived time bounds, transitions, intervals, provenance, quality and explicit unknown/degraded state | P0 replay emitted typed events and an open interval up to stream end |
+| How is a violation verified? | Reproduce the event trace, evaluate deterministic conditions, confirm health/quality and attach bounded evidence. Human review applies for ambiguous or high-impact policy actions | P0 confirmed a selected synthetic policy fixture and produced an evidence hash |
 | What evidence is produced? | Event IDs, rule/version, timestamps, source frame IDs, condition trace, model/config provenance, hashes, privacy classification and reviewer state | P0 produced a bounded metadata manifest; visual evidence quality pending |
-| How are false positives and false negatives handled? | Use rule-level precision/recall, false alerts and misses per camera-hour, unknown rate, hard negatives, calibration, error review and correction/retraction | Metrics and synthetic semantic checks exist; site rates pending |
-| What is already demonstrated? | 11/11 synthetic rule cases, 2/2 malformed-input checks, deterministic replay, model-neutral stage flow, bounded evidence hash, one-track zone dwell path and inspection of an existing SceneSolver artifact | Measured in `experiments/p0/` |
+| How are false positives and false negatives handled? | Use rule-level precision/recall, false alerts and misses per camera-hour, unknown rate, hard negatives, calibration, error review and correction/retraction | Selected synthetic behavior checks exist; site rates pending |
+| What is already demonstrated? | 11/11 checked synthetic rule fixtures, 2/2 malformed-input checks, deterministic replay, model-neutral stage flow, bounded evidence hash, one-track zone dwell path and inspection of an existing SceneSolver artifact | Measured in `experiments/p0/`; not complete rule correctness or deployment performance |
 | What remains to be experimentally validated? | Real detector accuracy, target-camera generalisation, tracking quality, hardware latency/memory/power, quantisation, VLM value, sensor value, cost and camera capacity | Open |
 | What should the first prototype contain? | One camera or replay source, one lightweight perception adapter, one tracker/trajectory path, typed events, deterministic rules, bounded evidence, replay tests and health/degraded handling | P0 demonstrates the contract; customer/site data still required |
 
@@ -53,8 +53,8 @@ The P0 pass is intentionally small. It does not retrain SceneSolver, implement a
 
 Measured P0 artifacts:
 
-- rule semantics over synthetic traces;
-- model-neutral structured replay from sampling through evidence;
+- selected rule-fixture conformance over synthetic traces;
+- model-neutral structured replay from sampling through evidence, including an open interval at stream end;
 - a specialised CV contract path using precomputed detections;
 - inspection of the existing SceneSolver report artifact and its reproducibility blockers.
 

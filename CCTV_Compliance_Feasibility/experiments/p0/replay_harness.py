@@ -25,12 +25,12 @@ def iso(seconds: float) -> str:
     return (BASE_TIME + timedelta(seconds=float(seconds))).isoformat().replace("+00:00", "Z")
 
 
-def make_event(event_id: str, event_type: str, start: float, end: float, attributes: dict, source_type: str = "rule") -> dict:
+def make_event(event_id: str, event_type: str, start: float, end: float, attributes: dict, source_type: str = "rule", complete: bool = True) -> dict:
     return {
         "event_id": event_id,
         "event_type": event_type,
         "camera_id": "cam-p0",
-        "time": {"start": iso(start), "end": iso(end), "clock_domain": "monotonic-derived", "complete": True},
+        "time": {"start": iso(start), "end": iso(end), "clock_domain": "monotonic-derived", "complete": complete},
         "attributes": attributes,
         "quality": {"status": "observed", "track_quality": 1.0},
         "provenance": {"source_type": source_type, "source_id": "p0-replay", "model_version": None},
@@ -74,24 +74,43 @@ def main() -> int:
     stage_ms["observation"] = round((time.perf_counter() - t) * 1000, 3)
 
     t = time.perf_counter()
+    stream_end = raw["frames"][-1]["timestamp_s"]
     inside = [item for item in observations if item["inside_zone"] and item["track_hint"] == "p1"]
     entered = inside[0]["timestamp_s"] if inside else None
-    exited = next((item["timestamp_s"] for item in observations if item["timestamp_s"] > (entered or -1) and not item["inside_zone"]), None)
+    exit_candidate = next((item["timestamp_s"] for item in observations if item["timestamp_s"] > (entered or -1) and not item["inside_zone"]), None)
+    exit_observed = exit_candidate is not None and exit_candidate < stream_end
+    observed_end = exit_candidate if exit_observed else stream_end
+    interval_status = "complete" if exit_observed else "open"
     if entered is not None:
-        exit_time = exited if exited is not None else inside[-1]["timestamp_s"]
+        interval_attributes = {
+            "zone": zone["id"],
+            "subject": "p1",
+            "interval_status": interval_status,
+            "observed_duration_s": observed_end - entered,
+            "exit_observed": exit_observed,
+            "end_reason": "observed_exit" if exit_observed else "stream_end",
+        }
         events = [
             make_event("r-entry-p1", "person.entered_zone", entered, entered, {"zone": zone["id"], "subject": "p1"}, "tracker"),
-            make_event("r-inside-p1", "person.inside_zone", entered, exit_time, {"zone": zone["id"], "subject": "p1"}, "tracker"),
-            make_event("r-health", "camera.health", 0.0, raw["frames"][-1]["timestamp_s"], {"status": raw["camera_health"]}, "sensor"),
+            make_event("r-inside-p1", "person.inside_zone", entered, observed_end, interval_attributes, "tracker", complete=exit_observed),
+            make_event("r-health", "camera.health", 0.0, stream_end, {"status": raw["camera_health"]}, "sensor"),
         ]
     else:
-        events = [make_event("r-health", "camera.health", 0.0, raw["frames"][-1]["timestamp_s"], {"status": raw["camera_health"]}, "sensor")]
+        events = [make_event("r-health", "camera.health", 0.0, stream_end, {"status": raw["camera_health"]}, "sensor")]
     stage_ms["event"] = round((time.perf_counter() - t) * 1000, 3)
 
     t = time.perf_counter()
     temporal_state = {
         "tracks": [{"track_id": "p1", "observed_frames": len(observations), "inside_zone": bool(inside)}],
-        "intervals": [{"event_id": "r-inside-p1", "start_s": entered, "end_s": exited, "status": "complete"}] if entered is not None else [],
+        "intervals": [{
+            "event_id": "r-inside-p1",
+            "start_s": entered,
+            "observed_end_s": observed_end,
+            "observed_duration_s": observed_end - entered,
+            "status": interval_status,
+            "exit_observed": exit_observed,
+            "end_reason": "observed_exit" if exit_observed else "stream_end",
+        }] if entered is not None else [],
     }
     stage_ms["temporal_state"] = round((time.perf_counter() - t) * 1000, 3)
 
@@ -110,6 +129,10 @@ def main() -> int:
             "event_ids": [event["event_id"] for event in events if event["event_type"] != "camera.health"],
             "source_frame_ids": [frame["frame_id"] for frame in sampled],
             "privacy": "metadata_only",
+            "interval_status": interval_status,
+            "observed_duration_s": observed_end - entered if entered is not None else None,
+            "exit_observed": exit_observed,
+            "evidence_scope": "up_to_stream_end" if not exit_observed else "through_observed_exit",
         }
         digest = hashlib.sha256(json.dumps(evidence_body, sort_keys=True).encode()).hexdigest()
         evidence = {"manifest": evidence_body, "sha256": digest, "bounded": True}
@@ -124,12 +147,18 @@ def main() -> int:
         "stage_wall_time_ms": stage_ms,
         "total_wall_time_ms": round((time.perf_counter() - overall_start) * 1000, 3),
         "stream": {"camera_id": raw["camera_id"], "source_fps": raw["source_fps"], "frames_decoded": len(frames), "frames_processed": len(sampled), "frames_skipped": len(frames) - len(sampled), "frames_dropped": 0},
-        "outputs": {"observations": len(observations), "events": len(events), "event_trace": events, "temporal_tracks": len(temporal_state["tracks"]), "rule_decision": decision, "evidence": evidence},
+        "outputs": {"observations": len(observations), "events": len(events), "event_trace": events, "temporal_state": temporal_state, "temporal_tracks": len(temporal_state["tracks"]), "rule_decision": decision, "evidence": evidence},
+        "semantic_checks": {
+            "interval_is_open_when_stream_ends_inside": interval_status == "open" and not exit_observed,
+            "exit_event_fabricated": any(event["event_type"] == "person.exited_zone" for event in events),
+            "observed_duration_distinguished_from_completed_interval": interval_status == "open" and evidence is not None and evidence["manifest"]["evidence_scope"] == "up_to_stream_end",
+        },
         "schema_errors": schema_errors,
         "limitations": [
             "No video decoder or visual detector was run; input detections are synthetic precomputed observations.",
             "The tracker is a single-track adapter using track_hint, not a MOT evaluation.",
-            "Runtime values measure this Python contract replay only and are not deployment throughput.",
+            "The final frame leaves the interval open: observed duration reaches stream end and no exit event is fabricated.",
+            "Runtime values measure this synthetic contract replay only and are not CCTV inference latency, camera throughput, deployment FPS or real-time system performance.",
         ],
     }
     OUTPUT.write_text(json.dumps(output, indent=2) + "\n", encoding="utf-8")
