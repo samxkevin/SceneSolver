@@ -2,7 +2,7 @@
   "artifact": "P0 rule engine validation",
   "status": "measured_pass",
   "implementation_scope": "synthetic evaluator for checked-in fixtures; not production rule service",
-  "input": "CCTV_Compliance_Feasibility/experiments/p0/rule_engine_cases.json",
+  "input": "CCTV-Compliance-Feasibility/experiments/p0/rule_engine_cases.json",
   "event_contract": "temporal_reasoning/event.schema.json via compact fixture adapter",
   "rule_contract": "rule_engine/rule.schema.yaml required fields and allow-listed P0 operators",
   "test_count": 11,
