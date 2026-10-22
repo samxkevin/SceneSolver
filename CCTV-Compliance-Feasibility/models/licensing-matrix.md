@@ -39,3 +39,13 @@ legal_review_reference: null
 ## Selection rule
 
 A candidate cannot enter a production shortlist until the license manifest is complete, the deployment mode is compatible, required notices/attribution are implementable, and legal/security review has accepted the residual risk. A higher measured score does not override a blocked license.
+
+## 2026-10-22 added candidate licensing gates (research, not legal clearance)
+
+| Candidate | Verified code evidence | Verified weights/model evidence | Commercial/redistribution gate | Required next evidence |
+|---|---|---|---|---|
+| NVILA (VILA 2.0) | [NVlabs/VILA code license](https://github.com/NVlabs/VILA/blob/main/CODE_LICENSE): Apache-2.0 | [NVlabs/VILA model license](https://github.com/NVlabs/VILA/blob/main/MODEL_LICENSE): project labels CC BY-NC 4.0 | **Commercial production blocked for released non-commercial weights** unless separately authorized; code permission does not override weight terms | Pin exact NVILA 3B/8B/video weights, upstream base models and derivatives; legal review for intended use |
+| CuMo | [SHI-Labs/CuMo](https://github.com/SHI-Labs/CuMo): Apache-2.0 code | [WEIGHT_LICENSE](https://github.com/SHI-Labs/CuMo/blob/main/WEIGHT_LICENSE): CC BY-NC 4.0 | **Commercial production blocked for released non-commercial weights** unless separately authorized | Check exact checkpoint, upstream foundation models, data/weights redistribution and fine-tune inheritance |
+| NVIDIA NV-DINOv2 | [Official NVIDIA model reference](https://docs.api.nvidia.com/nim/reference/nvidia-nv-dinov2); not an independently verified generic code license | Official model card describes commercially pretrained NV-DinoV2 variants, but exact weight terms must be pinned | **Conditional, not cleared**: official card specifies NVIDIA hardware with TAO Toolkit or TensorRT; confirm current terms, weight license, platform and redistribution with vendor/legal | Pin NV-DinoV2-224-V0 or -518-V0, NVIDIA runtime/TAO revision, GPU/device SKU and model-card terms |
+
+Do not infer permissive *weight* rights from Apache-2.0 repository code licenses. These entries are documentation checks, not production approvals.
