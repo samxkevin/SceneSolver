@@ -56,3 +56,58 @@ This matrix is a shortlist for experiments, not a ranking. “CPU feasible” me
 - **LoRA/adapters:** reduce trainable parameters and adaptation storage; they do not automatically reduce the base model's inference memory, activation memory, or latency unless the deployment stack merges/prunes or uses an adapter-aware runtime.
 - **Quantisation:** lowers weight/activation precision and may reduce memory/bandwidth; speed depends on kernels and hardware. Unsupported operators can fall back to FP32/CPU.
 - **Distillation:** can make a small student viable, but requires a teacher, representative data and an evaluation that preserves rare-event recall.
+
+## 2026-10-22 supervisor seed coverage audit (individual entries; not model selections)
+
+This audit complements the family-level table above. **Source status is not a deployment approval.** `PUBLISHED` denotes official project/model documentation, `INFERENCE` denotes proposed relevance to CCTV, and `OPEN` denotes an unresolved exact-checkpoint, environment, license, or performance gate. None of these candidates has measured P1 CCTV performance. The existing SceneSolver seven-class classifier is a reference only, not the CCTV baseline.
+
+| Supervisor category | Supplied candidate (retained) | Task fit / important distinction | Audit status |
+|---|---|---|---|
+| Tracking | TAPNext | point tracker, not detector | Seed preserved; OPEN: dedicated checkpoint/licensing/runtime card |
+| Tracking | CoTracker3 | point tracker, not detector | Seed preserved; OPEN: dedicated checkpoint/licensing/runtime card |
+| Tracking | BootsTAP | training procedure, not inference model | Seed preserved; OPEN: dedicated checkpoint/licensing/runtime card |
+| Tracking | SpatialTracker | 3D point tracker | Seed preserved; OPEN: dedicated checkpoint/licensing/runtime card |
+| Grounding/segmentation | Grounding DINO 1.6 | text-phrase to boxes; exact release/version gate | Seed preserved; OPEN: dedicated checkpoint/licensing/runtime card |
+| Grounding/segmentation | DINOv3 | features/backbone, not zero-shot detector alone | Seed preserved; OPEN: dedicated checkpoint/licensing/runtime card |
+| Grounding/segmentation | OWLv2 | text-query open-vocabulary boxes | Seed preserved; OPEN: dedicated checkpoint/licensing/runtime card |
+| Grounding/segmentation | SAM2 | promptable masks/video propagation | Seed preserved; OPEN: dedicated checkpoint/licensing/runtime card |
+| Grounding/segmentation | SAM3 | promptable open-vocabulary segmentation/tracking; custom license | Seed preserved; OPEN: dedicated checkpoint/licensing/runtime card |
+| NVIDIA | NVILA | VILA 2.0; image/video VLM | PUBLISHED: official family; OPEN: exact deployment gates |
+| NVIDIA | Cosmos World Foundation Models | world-model/physical-AI family, not CCTV detector | Seed preserved; OPEN: dedicated checkpoint/licensing/runtime card |
+| NVIDIA | FoundationPose | 6D object pose estimation | Seed preserved; OPEN: dedicated checkpoint/licensing/runtime card |
+| NVIDIA | NV-DINOv2 (supervisor: NVDINOv2) | visual embeddings; official NVIDIA TAO/TensorRT constraints | PUBLISHED: official family; OPEN: exact deployment gates |
+| NVIDIA | CuMo | multimodal MoE VLM; pretrained weights noncommercial | PUBLISHED: official family; OPEN: exact deployment gates |
+| Vision-language | Qwen2.5 VL | VLM; evidence review only | Seed preserved; OPEN: dedicated checkpoint/licensing/runtime card |
+| Vision-language | Qwen3 VL | VLM; evidence review only | Seed preserved; OPEN: dedicated checkpoint/licensing/runtime card |
+| Vision-language | InternVL3 | VLM; evidence review only | Seed preserved; OPEN: dedicated checkpoint/licensing/runtime card |
+| Vision-language | InternVL3.5 | VLM; evidence review only | Seed preserved; OPEN: dedicated checkpoint/licensing/runtime card |
+| Vision-language | PaliGemma 2 | VLM; exact variant needed | Seed preserved; OPEN: dedicated checkpoint/licensing/runtime card |
+| Vision-language | Florence 2 | vision-language generalist; exact checkpoint needed | Seed preserved; OPEN: dedicated checkpoint/licensing/runtime card |
+| Vision-language | Florence 3 | identity unresolved; preserve seed | OPEN: model identity |
+| Vision-language | LLaVA NeXT | VLM; exact checkpoint needed | Seed preserved; OPEN: dedicated checkpoint/licensing/runtime card |
+| Vision-language | LLaVA OneVision | VLM; exact checkpoint needed | Seed preserved; OPEN: dedicated checkpoint/licensing/runtime card |
+| Vision-language | Gemini 2.5 Flash | hosted multimodal service; API terms/data policy | Seed preserved; OPEN: dedicated checkpoint/licensing/runtime card |
+| Vision-language | Gemini 2.5 Pro Vision | model/endpoint identity and availability check | Seed preserved; OPEN: dedicated checkpoint/licensing/runtime card |
+| Vision-language | GPT 4o vision | hosted multimodal service; version pin | Seed preserved; OPEN: dedicated checkpoint/licensing/runtime card |
+| Vision-language | GPT 5 vision | hosted model identity and version pin | Seed preserved; OPEN: dedicated checkpoint/licensing/runtime card |
+| Representation/geometry | SigLIP 2 | embedding encoder | Seed preserved; OPEN: dedicated checkpoint/licensing/runtime card |
+| Representation/geometry | EVA 02 | visual representation encoder | Seed preserved; OPEN: dedicated checkpoint/licensing/runtime card |
+| Representation/geometry | EVA CLIP | image/text representation encoder | Seed preserved; OPEN: dedicated checkpoint/licensing/runtime card |
+| Representation/geometry | ConvNeXt V2 | visual backbone | Seed preserved; OPEN: dedicated checkpoint/licensing/runtime card |
+| Representation/geometry | DINOv2.5 | identity unresolved; preserve seed | OPEN: model identity |
+| Representation/geometry | Depth Anything 3 | depth/geometry | Seed preserved; OPEN: dedicated checkpoint/licensing/runtime card |
+| Representation/geometry | Depth Pro | monocular depth/geometry | Seed preserved; OPEN: dedicated checkpoint/licensing/runtime card |
+
+**Coverage: 34/34 supervisor seed names explicitly enumerated.** Aliases normalized without losing original spelling: `NVDINOv2` -> `NV-DINOv2`; `NVILA` = `NVILA (a.k.a. VILA 2.0)`; `CuMo` is the Co-Upcycled Mixture-of-Experts paper. `Florence 3` and `DINOv2.5` remain unverified identities; no replacement is implied. This list does not assert that every name has a completed model card. Newer additions (SAM3.1, TAPNext++, SpatialTrackerV2, DINO X, etc.) remain in the separate landscape survey and are not substituted for any supervisor seed.
+
+### Newly expanded individual feasibility cards
+
+| Candidate | Verified published/model documentation | Inputs -> outputs and possible position | Practical evaluation and failure risks | Hardware/precision and license gate | Decision |
+|---|---|---|---|---|---|
+| **NVILA (VILA 2.0)** | [NVlabs/VILA](https://github.com/NVlabs/VILA) identifies NVILA as VILA 2.0 and includes video-understanding variants; repository identifies Apache-2.0 *code* | Selected images/video + question -> generated answer/narrative. Optional bounded evidence review downstream of deterministic rules | Test hallucination, temporal grounding, prompt variability, GPU memory, p95 review latency, privacy/egress. Not primary detector, tracker, or policy authority | GPU/TensorRT-LLM/TinyChat examples are published for specific variants, **not site measurements**. Exact 3B/8B/video checkpoint, weights terms, quantized artifact, dependencies, CUDA/device, and redistribution remain **OPEN** | Research candidate only |
+| **CuMo** | [SHI-Labs/CuMo](https://github.com/SHI-Labs/CuMo) and [NeurIPS paper](https://papers.nips.cc/paper_files/paper/2024/hash/ed1d3d4c64dc1b95332a8cde3f2a0bdf-Abstract-Conference.html). Co-Upcycled sparse MoE vision-encoder/connector components; Apache-2.0 code; released weights **CC BY-NC 4.0** | Image + language prompt -> VLM response. Advisory exploratory comparator only | MoE routing and total runtime memory may remain large; image QA is not grounded CCTV temporal rule evidence; no site latency/reliability established | Repository describes 4/8-bit load options, not proven edge use. Released weight non-commercial restriction: **BLOCKED for commercial deployment absent separate clearance**. Exact checkpoint/dependency gate OPEN | Research-only; no production approval |
+| **NVIDIA NV-DINOv2** | [NVIDIA official model card](https://docs.api.nvidia.com/nim/reference/nvidia-nv-dinov2) identifies NV-DinoV2-224-V0 and NV-DinoV2-518-V0; model card says commercially pretrained | RGB image -> image embedding (published 1024-D ViT-L, 1536-D ViT-G); downstream detection/classification/segmentation needs task-specific head. Not a stand-alone open-vocabulary detector | Determine whether embedding+head improves necessary observations vs direct small detector; new training/head, object size, domain shift and runtime add cost | Official card restricts use to **NVIDIA hardware** with **TAO Toolkit or TensorRT**; named NVIDIA GPU/Jetson architectures, Linux/Linux4Tegra, TAO 5.2 listed. Card says 'ready for commercial use', but exact weights terms, redistribution and legal acceptance still OPEN; vendor inference-only FPS is not CCTV end-to-end | Research candidate only |
+
+### Mandatory model-card fields prior to controlled candidate selection
+
+For each exact checkpoint, record repository commit/revision, model/weight ID and hash, code and weights licenses separately, upstream dependencies, commercial use and redistribution, consent/retention or egress implications, input/output contract, target hardware and runtime, model load time, p50/p95 latency, peak RAM/VRAM, dropped/skipped frames, camera-hour false alerts, missed/false zone entries, dwell timing error, unknown/degraded intervals, rule-level utility and supervisor disposition. Do not infer a license from a GitHub repository's headline badge. No score or winner is asserted until a locked P1 dataset and rule specification exist.
