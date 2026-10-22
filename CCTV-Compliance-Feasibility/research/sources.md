@@ -68,3 +68,15 @@ Cosmos 3 is not a CCTV detector. Its current official repository positions it as
 Published FPS, AP or accuracy numbers must always be copied with model variant, input size, dataset/split, hardware, precision, batch/concurrency and whether preprocessing/postprocessing are included. If any are absent, record the number as non comparable and remeasure.
 
 Arena measurements must be stored separately from all published numbers.
+
+## 2026-10-22 model-matrix coverage corrections
+
+| ID | Official source | Verified claim / constraint | Unresolved |
+|---|---|---|---|
+| `D-NVILA-DETAIL` | [NVlabs/VILA README](https://github.com/NVlabs/VILA) | Official alias **NVILA (a.k.a. VILA 2.0)**; image/video understanding variants; not a CCTV detector | Variant/checkpoint/version, end-to-end rule performance, hardware |
+| `L-NVILA-MODEL` | [NVlabs/VILA MODEL_LICENSE](https://github.com/NVlabs/VILA/blob/main/MODEL_LICENSE) and [CODE_LICENSE](https://github.com/NVlabs/VILA/blob/main/CODE_LICENSE) | Model weights shown as **CC BY-NC 4.0**, code Apache-2.0. Commercial usage of released weights not approved by these terms | Any separate commercial agreement; exact upstream dependencies |
+| `D-CUMO` | [SHI-Labs/CuMo](https://github.com/SHI-Labs/CuMo); [NeurIPS 2024 paper](https://papers.nips.cc/paper_files/paper/2024/hash/ed1d3d4c64dc1b95332a8cde3f2a0bdf-Abstract-Conference.html) | **Co-Upcycled Mixture-of-Experts** multimodal LLM, not semantic CCTV detector or point tracker | Runtime, role-specific benefits, exact model revision |
+| `L-CUMO` | [SHI-Labs/CuMo WEIGHT_LICENSE](https://github.com/SHI-Labs/CuMo/blob/main/WEIGHT_LICENSE) | Apache-2.0 code, CC BY-NC 4.0 released weights; upstream assets have independent terms | Commercial clearance; redistribution manifest |
+| `D-NVDINO` | [NVIDIA NV-DINOv2 model card](https://docs.api.nvidia.com/nim/reference/nvidia-nv-dinov2) | Official name **NV-DINOv2**; embedding-oriented foundation model, documented 224/518 variants, NVIDIA TAO/TensorRT + NVIDIA hardware conditions | Weight license in binding form; hardware exact variant/driver, endpoint/runtime version, redistribution |
+
+These sources establish published capabilities and licensing representations only; there are **no P1 measurements**. `Florence 3` and `DINOv2.5` remain model-identity questions and are not silently mapped to other projects.
